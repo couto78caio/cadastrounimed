@@ -1,47 +1,161 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <title>Idades e Confirmação</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exibir Idades</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Confirmação de Idades</h1>
+    <div class="container mt-5">
+        <h1>Idades Informadas</h1>
+        <div>
+            <h2>Titular</h2>
+            <p>Nome: {{ titular.titular }}</p>
+            <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
+            <p>Idade: <input type="text" id="idade_titular" value="{{ idade_titular }}" readonly></p>
+            <div class="form-group">
+                <label for="cod_contrato_exibir">Código do Contrato:</label>
+                <input type="text" class="form-control" id="cod_contrato_exibir" value="{{ titular.cod_contrato }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="valor_titular">Valor Mensal:</label>
+                <input type="text" class="form-control" id="valor_titular" readonly>
+            </div>
+            <div class="form-group">
+                <label for="descricao_titular">Descrição do Plano:</label>
+                <textarea class="form-control" id="descricao_titular" rows="3" readonly></textarea>
+            </div>
+        </div>
 
-    <h2>Titular</h2>
-    <p>Nome: {{ titular.titular }}</p>
-    <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
-    <p>Idade: {{ idade_titular }} anos</p>
-
-    {% if dependentes %}
-    <h2>Dependentes</h2>
-    <ul>
-        {% for dependente in dependentes %}
-        <li>
-            Nome: {{ dependente.nome }}<br>
-            Data de Nascimento: {{ dependente.dt_nascimento }}<br>
-            Idade: {{ dependente.idade }} anos
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    <form method="POST" action="{{ url_for('resumo_cadastro') }}">
-        <h3>Confirmar Dados para Resumo</h3>
-        {% for key, value in titular.items() %}
-            <input type="hidden" name="{{ key }}" value="{{ value }}">
-        {% endfor %}
-        <input type="hidden" name="idade_titular" value="{{ idade_titular }}">
         {% if dependentes %}
+        <hr>
+        <h2>Dependentes</h2>
+        <ul>
             {% for dependente in dependentes %}
-                {% for key, value in dependente.items() %}
-                    <input type="hidden" name="dependente_{{ key }}_{loop.index}" value="{{ value }}">
-                {% endfor %}
-                <input type="hidden" name="idade_dependente_{{ loop.index }}" value="{{ dependente.idade }}">
+            <li>
+                <p>Nome: {{ dependente.nome }}</p>
+                <p>Data de Nascimento: {{ dependente.dt_nascimento }}</p>
+                <p>Idade: {{ dependente.idade }}</p>
+                <div class="form-group">
+                    <label for="valor_dependente_{{ loop.index }}">Valor Mensal:</label>
+                    <input type="text" class="form-control" id="valor_dependente_{{ loop.index }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="descricao_dependente_{{ loop.index }}">Descrição do Plano:</label>
+                    <textarea class="form-control" id="descricao_dependente_{{ loop.index }}" rows="3" readonly></textarea>
+                </div>
+                <hr>
+            </li>
             {% endfor %}
+        </ul>
         {% endif %}
-        <button type="submit">Ver Resumo e Calcular Valores</button>
-    </form>
 
-    <a href="{{ url_for('formulario_inicial') }}">Voltar ao Formulário</a>
+        <form method="POST" action="/resumo">
+            {% for key, value in titular.items() %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <input type="hidden" name="idade_titular" value="{{ idade_titular }}">
+
+            {% if dependentes %}
+                {% for dependente in dependentes %}
+                    <input type="hidden" name="dependente_nome_{{ loop.index }}" value="{{ dependente.nome }}">
+                    <input type="hidden" name="sexo_dependente_{{ loop.index }}" value="{{ dependente.sexo }}">
+                    <input type="hidden" name="dependente_cpf_{{ loop.index }}" value="{{ dependente.cpf }}">
+                    <input type="hidden" name="dependente_nasc_{{ loop.index }}" value="{{ dependente.dt_nascimento }}">
+                    <input type="hidden" name="dependente_parentesco_{{ loop.index }}" value="{{ dependente.parentesco }}">
+                    <input type="hidden" name="idade_dependente_{{ loop.index }}" value="{{ dependente.idade }}">
+                    <input type="hidden" name="valor_dependente_{{ loop.index }}" id="valor_dependente_hidden_{{ loop.index }}">
+                    <input type="hidden" name="descricao_dependente_{{ loop.index }}" id="descricao_dependente_hidden_{{ loop.index }}">
+                {% endfor %}
+            {% endif %}
+            <input type="hidden" name="valor_titular" id="valor_titular_hidden">
+            <input type="hidden" name="descricao_titular" id="descricao_titular_hidden">
+
+            <button type="submit" class="btn btn-primary mt-3">Ver Resumo e Salvar</button>
+        </form>
+    </div>
+
+    <script>
+        const tabelaPrecos = {{ tabela_precos_json | tojson }};
+
+        function exibirPrecos() {
+            const codigoContrato = document.getElementById('cod_contrato_exibir').value;
+            const idadeTitular = document.getElementById('idade_titular').value;
+            const valorTitularInput = document.getElementById('valor_titular');
+            const descricaoTitularTextarea = document.getElementById('descricao_titular');
+            const valorTitularHidden = document.getElementById('valor_titular_hidden');
+            const descricaoTitularHidden = document.getElementById('descricao_titular_hidden');
+
+            if (codigoContrato && idadeTitular && tabelaPrecos) {
+                const precoTitularInfo = tabelaPrecos.find(item =>
+                    item.codigo_contrato === codigoContrato &&
+                    parseInt(idadeTitular) >= item.idade_min &&
+                    parseInt(idadeTitular) <= item.idade_max
+                );
+
+                if (precoTitularInfo) {
+                    valorTitularInput.value = precoTitularInfo.valor_mensal;
+                    descricaoTitularTextarea.value = precoTitularInfo.descricao;
+                    valorTitularHidden.value = precoTitularInfo.valor_mensal;
+                    descricaoTitularHidden.value = precoTitularInfo.descricao;
+                } else {
+                    valorTitularInput.value = '';
+                    descricaoTitularTextarea.value = 'Nenhum preço encontrado para o titular.';
+                    valorTitularHidden.value = '';
+                    descricaoTitularHidden.value = '';
+                }
+
+                {% if dependentes %}
+                    {% for dependente in dependentes %}
+                        const idadeDependente{{ loop.index }} = {{ dependente.idade }};
+                        const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
+                        const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}');
+                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}');
+                        const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}');
+
+                        const precoDependenteInfo{{ loop.index }} = tabelaPrecos.find(item =>
+                            item.codigo_contrato === codigoContrato &&
+                            idadeDependente{{ loop.index }} >= item.idade_min &&
+                            idadeDependente{{ loop.index }} <= item.idade_max
+                        );
+
+                        if (precoDependenteInfo{{ loop.index }}) {
+                            valorDependenteInput{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.valor_mensal;
+                            descricaoDependenteTextarea{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.descricao;
+                            valorDependenteHidden{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.valor_mensal;
+                            descricaoDependenteHidden{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.descricao;
+                        } else {
+                            valorDependenteInput{{ loop.index }}.value = '';
+                            descricaoDependenteTextarea{{ loop.index }}.value = 'Nenhum preço encontrado para o dependente.';
+                            valorDependenteHidden{{ loop.index }}.value = '';
+                            descricaoDependenteHidden{{ loop.index }}.value = '';
+                        }
+                    {% endfor %}
+                {% endif %}
+
+            } else {
+                valorTitularInput.value = '';
+                descricaoTitularTextarea.value = '';
+                valorTitularHidden.value = '';
+                descricaoTitularHidden.value = '';
+                {% if dependentes %}
+                    {% for dependente in dependentes %}
+                        const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
+                        const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}');
+                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}');
+                        const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}';
+                        valorDependenteInput{{ loop.index }}.value = '';
+                        descricaoDependenteTextarea{{ loop.index }}.value = '';
+                        valorDependenteHidden{{ loop.index }}.value = '';
+                        descricaoDependenteHidden{{ loop.index }}.value = '';
+                    {% endfor %}
+                {% endif %}
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', exibirPrecos);
+    </script>
 </body>
 </html>
