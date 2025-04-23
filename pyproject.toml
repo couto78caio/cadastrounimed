@@ -1,0 +1,15 @@
+[project]
+name = "projeto_saude"
+version = "0.1.0"
+description = "Formulário de cadastro de plano de saúde com Flask"
+authors = [
+    { name="Seu Nome", email="seu.email@exemplo.com" },
+]
+dependencies = [
+    "Flask>=2.0.0",
+    "pandas>=1.3.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
