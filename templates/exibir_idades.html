@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>Idades e Confirmação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Confirmação de Idades</h1>
+
+    <h2>Titular</h2>
+    <p>Nome: {{ titular.titular }}</p>
+    <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
+    <p>Idade: {{ idade_titular }} anos</p>
+
+    {% if dependentes %}
+    <h2>Dependentes</h2>
+    <ul>
+        {% for dependente in dependentes %}
+        <li>
+            Nome: {{ dependente.nome }}<br>
+            Data de Nascimento: {{ dependente.dt_nascimento }}<br>
+            Idade: {{ dependente.idade }} anos
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('resumo_cadastro') }}">
+        <h3>Confirmar Dados para Resumo</h3>
+        {% for key, value in titular.items() %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endfor %}
+        <input type="hidden" name="idade_titular" value="{{ idade_titular }}">
+        {% if dependentes %}
+            {% for dependente in dependentes %}
+                {% for key, value in dependente.items() %}
+                    <input type="hidden" name="dependente_{{ key }}_{loop.index}" value="{{ value }}">
+                {% endfor %}
+                <input type="hidden" name="idade_dependente_{{ loop.index }}" value="{{ dependente.idade }}">
+            {% endfor %}
+        {% endif %}
+        <button type="submit">Ver Resumo e Calcular Valores</button>
+    </form>
+
+    <a href="{{ url_for('formulario_inicial') }}">Voltar ao Formulário</a>
+</body>
+</html>
