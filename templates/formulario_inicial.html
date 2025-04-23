@@ -10,7 +10,7 @@
 <body>
     <div class="container mt-5">
         <h1>Cadastro de Plano de Saúde</h1>
-        <form method="POST" action="/">
+        <form method="POST" action="/idades">
             <h2>Dados do Titular</h2>
             <div class="form-group">
                 <label for="cod_contrato">Código do Contrato *</label>
@@ -120,8 +120,7 @@
         function mostrarDependentes() {
             const temDependente = document.getElementById('tem_dependente').value;
             const dependentesContainer = document.getElementById('dependentes_container');
-            if (temDependente === 'Sim') {
-                dependentesContainer.style.display = 'block';
+            if (temDependente === 'Sim') {dependentesContainer.style.display = 'block';
                 // Adiciona o primeiro dependente automaticamente ao mostrar a seção
                 if (contadorDependentes === 0) {
                     adicionarDependente();
