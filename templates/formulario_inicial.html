@@ -133,8 +133,7 @@
             }
         }
 
-        function atualizarTitularNosDependentes() {
-            const titularNome = document.getElementById('titular').value;
+        function atualizarTitularNosDependentes() {const titularNome = document.getElementById('titular').value;
             const elementosTitularDependente = document.querySelectorAll('[readonly][id^="dependente_titular_"]');
             elementosTitularDependente.forEach(elemento => {
                 elemento.value = titularNome;
