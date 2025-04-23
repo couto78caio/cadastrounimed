@@ -88,19 +88,26 @@
             const valorTitularHidden = document.getElementById('valor_titular_hidden');
             const descricaoTitularHidden = document.getElementById('descricao_titular_hidden');
 
+            console.log("Código do Contrato (HTML):", codigoContrato);
+            console.log("Idade do Titular (HTML):", idadeTitular);
+            console.log("Dados da Tabela de Preços:", tabelaPrecos);
+
             if (codigoContrato && !isNaN(idadeTitular) && tabelaPrecos) {
-                const precoTitularInfo = tabelaPrecos.find(item =>
-                    item.codigo_contrato.trim() === codigoContrato &&
-                    idadeTitular >= parseInt(item.idade_min) &&
-                    idadeTitular <= parseInt(item.idade_max)
-                );
+                const precoTitularInfo = tabelaPrecos.find(item => {
+                    console.log("Comparando:", "Contrato CSV:", item.codigo_contrato.trim(), "==", codigoContrato, "Idade Min:", parseInt(item.idade_min), "<=", idadeTitular, "Idade Max:", parseInt(item.idade_max), ">=", idadeTitular);
+                    return item.codigo_contrato.trim() === codigoContrato &&
+                           idadeTitular >= parseInt(item.idade_min) &&
+                           idadeTitular <= parseInt(item.idade_max);
+                });
 
                 if (precoTitularInfo) {
+                    console.log("Preço Encontrado:", precoTitularInfo);
                     valorTitularInput.value = precoTitularInfo.valor_mensal;
                     descricaoTitularTextarea.value = precoTitularInfo.descricao;
                     valorTitularHidden.value = precoTitularInfo.valor_mensal;
                     descricaoTitularHidden.value = precoTitularInfo.descricao;
                 } else {
+                    console.log("Nenhum preço encontrado para o titular.");
                     valorTitularInput.value = '';
                     descricaoTitularTextarea.value = 'Nenhum preço encontrado para o titular.';
                     valorTitularHidden.value = '';
@@ -112,14 +119,14 @@
                         const idadeDependente{{ loop.index }} = {{ dependente.idade }};
                         const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
                         const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}');
-                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}');
+                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}';
                         const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}';
 
-                        const precoDependenteInfo{{ loop.index }} = tabelaPrecos.find(item =>
-                            item.codigo_contrato.trim() === codigoContrato &&
-                            idadeDependente{{ loop.index }} >= parseInt(item.idade_min) &&
-                            idadeDependente{{ loop.index }} <= parseInt(item.idade_max)
-                        );
+                        const precoDependenteInfo{{ loop.index }} = tabelaPrecos.find(item => {
+                            return item.codigo_contrato.trim() === codigoContrato &&
+                                   idadeDependente{{ loop.index }} >= parseInt(item.idade_min) &&
+                                   idadeDependente{{ loop.index }} <= parseInt(item.idade_max);
+                        });
 
                         if (precoDependenteInfo{{ loop.index }}) {
                             valorDependenteInput{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.valor_mensal;
@@ -143,7 +150,7 @@
                 {% if dependentes %}
                     {% for dependente in dependentes %}
                         const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
-                        const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}');
+                        const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}';
                         const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}';
                         const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}';
                         valorDependenteInput{{ loop.index }}.value = '';
