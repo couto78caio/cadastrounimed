@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "projeto_saude"
+name = "gerador-de-contratos"
 version = "0.1.0"
-description = "Formulário de cadastro de plano de saúde com Flask"
-authors = "Caio Couto"
+description = "Gerador de contratos automatizados com Python"
+authors = ["Caio Couto <caiofelipecoutoramosesilva@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
