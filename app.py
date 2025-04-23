@@ -188,8 +188,8 @@ def salvar_csv():
 
     df = pd.DataFrame(dados_para_csv)
 
-    # Salvar o DataFrame em memória (StringIO)
-    csv_data = io.StringIO()
+    # Salvar o DataFrame em memória (BytesIO)
+    csv_data = io.BytesIO()
     df.to_csv(csv_data, index=False, encoding='utf-8')
     csv_data.seek(0)
 
