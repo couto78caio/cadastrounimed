@@ -1,51 +1,226 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <title>Formulário de Saúde</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/form.js') }}" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Plano de Saúde</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Cadastro de Plano de Saúde</h1>
-    <form method="POST" action="/">
-        <h2>Dados do Titular</h2>
-        <div class="field"><label>Código do Contrato: <input type="text" name="cod_contrato" id="cod_contrato" oninput="atualizaContratoNosDependentes()" required></label></div>
-        <div class="field"><label>Código do Beneficiário: <input type="text" name="cod_beneficiario"></label></div>
-        <div class="field"><label>Titular: <input type="text" name="titular" id="titular" oninput="atualizaTitularNosDependentes()" required></label></div>
-        <div class="field"><label>Sexo do Titular: <select name="sexo_titular" id="sexo_titular">
-            <option value="">Selecione</option>
-            <option value="masculino">Masculino</option>
-            <option value="feminino">Feminino</option>
-            <option value="outro">Outro</option>
-        </select></label></div>
-        <div class="field"><label>CPF/CNPJ: <input type="text" name="cpf_cnpj" required></label></div>
-        <div class="field"><label>Data de Nascimento: <input type="date" name="dt_nascimento" required></label></div>
-        <div class="field"><label>Número da Conta Corrente: <input type="text" name="num_conta_corrente"></label></div>
-        <div class="field"><label>Número de Telefone: <input type="tel" name="num_telefone"></label></div>
-        <div class="field"><label>UF: <input type="text" name="uf" maxlength="2"></label></div>
-        <div class="field"><label>Cidade: <input type="text" name="cidade"></label></div>
-        <div class="field"><label>Endereço: <input type="text" name="endereco"></label></div>
-        <div class="field"><label>Data do Contrato: <input type="date" name="dt_contrato" required></label></div>
-
-        <h2>Dependentes</h2>
-        <div class="field">
-            <label>Possui Dependentes?
-                <select id="tem_dependente" onchange="mostrarDependentes()">
-                    <option value="nao">Não</option>
-                    <option value="sim">Sim</option>
+    <div class="container mt-5">
+        <h1>Cadastro de Plano de Saúde</h1>
+        <form method="POST" action="/">
+            <h2>Dados do Titular</h2>
+            <div class="form-group">
+                <label for="cod_contrato">Código do Contrato *</label>
+                <input type="text" class="form-control" id="cod_contrato" name="cod_contrato" required>
+            </div>
+            <div class="form-group">
+                <label for="cod_beneficiario">Código do Beneficiário</label>
+                <input type="text" class="form-control" id="cod_beneficiario" name="cod_beneficiario">
+            </div>
+            <div class="form-group">
+                <label for="titular">Nome do Titular *</label>
+                <input type="text" class="form-control" id="titular" name="titular" required>
+            </div>
+            <div class="form-group">
+                <label for="sexo_titular">Sexo do Titular</label>
+                <select class="form-control" id="sexo_titular" name="sexo_titular">
+                    <option value="">Selecione</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
                 </select>
-            </label>
-        </div>
+            </div>
+            <div class="form-group">
+                <label for="cpf_cnpj">CPF/CNPJ *</label>
+                <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj" required>
+            </div>
+            <div class="form-group">
+                <label for="dt_nascimento">Data de Nascimento *</label>
+                <input type="date" class="form-control" id="dt_nascimento" name="dt_nascimento" required>
+            </div>
+            <div class="form-group">
+                <label for="num_conta_corrente">Número da Conta Corrente</label>
+                <input type="text" class="form-control" id="num_conta_corrente" name="num_conta_corrente">
+            </div>
+            <div class="form-group">
+                <label for="num_telefone">Número de Telefone</label>
+                <input type="tel" class="form-control" id="num_telefone" name="num_telefone">
+            </div>
+            <div class="form-group">
+                <label for="uf">UF</label>
+                <select class="form-control" id="uf" name="uf">
+                    <option value="">Selecione</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AP">AP</option>
+                    <option value="AM">AM</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MT">MT</option>
+                    <option value="MS">MS</option>
+                    <option value="MG">MG</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PR">PR</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RS">RS</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="SC">SC</option>
+                    <option value="SP">SP</option>
+                    <option value="SE">SE</option>
+                    <option value="TO">TO</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cidade">Cidade</label>
+                <input type="text" class="form-control" id="cidade" name="cidade">
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <input type="text" class="form-control" id="endereco" name="endereco">
+            </div>
+            <div class="form-group">
+                <label for="dt_contrato">Data do Contrato *</label>
+                <input type="date" class="form-control" id="dt_contrato" name="dt_contrato" required>
+            </div>
 
-        <div id="dependentes_container" class="dependentes-section" style="display:none;">
-            <h3>Lista de Dependentes</h3>
-            <div id="lista_dependentes"></div>
-            <button type="button" onclick="adicionarDependente()">+ Adicionar Dependente</button>
-        </div>
+            <div class="form-group">
+                <label for="tem_dependente">Possui Dependentes?</label>
+                <select class="form-control" id="tem_dependente" onchange="mostrarDependentes()">
+                    <option value="Não" selected>Não</option>
+                    <option value="Sim">Sim</option>
+                </select>
+            </div>
 
-        <button type="submit">Próximo</button>
-    </form>
+            <div id="dependentes_container" style="display: none;">
+                <h2>Dependentes</h2>
+                <div id="lista_dependentes">
+                    </div>
+                <button type="button" onclick="adicionarDependente()" class="btn btn-success btn-sm mt-2">+ Adicionar Dependente</button>
+            </div>
 
-    <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+            <button type="submit" class="btn btn-primary mt-3">Próximo</button>
+        </form>
+    </div>
+
+    <script>
+        let contadorDependentes = 0;
+
+        function mostrarDependentes() {
+            const temDependente = document.getElementById('tem_dependente').value;
+            const dependentesContainer = document.getElementById('dependentes_container');
+            if (temDependente === 'Sim') {
+                dependentesContainer.style.display = 'block';
+                // Adiciona o primeiro dependente automaticamente ao mostrar a seção
+                if (contadorDependentes === 0) {
+                    adicionarDependente();
+                }
+            } else {
+                dependentesContainer.style.display = 'none';
+                document.getElementById('lista_dependentes').innerHTML = ''; // Limpa os dependentes
+                contadorDependentes = 0;
+            }
+        }
+
+        function atualizarTitularNosDependentes() {
+            const titularNome = document.getElementById('titular').value;
+            const elementosTitularDependente = document.querySelectorAll('[readonly][id^="dependente_titular_"]');
+            elementosTitularDependente.forEach(elemento => {
+                elemento.value = titularNome;
+            });
+        }
+
+        function atualizarContratoNosDependentes() {
+            const codContrato = document.getElementById('cod_contrato').value;
+            const elementosContratoDependente = document.querySelectorAll('[readonly][id^="dependente_cod_contrato_"]');
+            elementosContratoDependente.forEach(elemento => {
+                elemento.value = codContrato;
+            });
+        }
+
+        function adicionarDependente() {
+            contadorDependentes++;
+            const index = contadorDependentes;
+            const novoDependenteDiv = document.createElement('div');
+            novoDependenteDiv.id = `dependente_${index}`;
+            novoDependenteDiv.innerHTML = `
+                <h3>Dependente ${index}</h3>
+                <div class="form-group">
+                    <label for="dependente_nome_${index}">Nome do Dependente *</label>
+                    <input type="text" class="form-control" id="dependente_nome_${index}" name="dependente_nome_${index}" required>
+                </div>
+                <div class="form-group">
+                    <label for="sexo_dependente_${index}">Sexo do Dependente</label>
+                    <select class="form-control" id="sexo_dependente_${index}" name="sexo_dependente_${index}">
+                        <option value="">Selecione</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dependente_cpf_${index}">CPF/CNPJ do Dependente</label>
+                    <input type="text" class="form-control" id="dependente_cpf_${index}" name="dependente_cpf_${index}">
+                </div>
+                <div class="form-group">
+                    <label for="dependente_nasc_${index}">Data de Nascimento do Dependente *</label>
+                    <input type="date" class="form-control" id="dependente_nasc_${index}" name="dependente_nasc_${index}" required>
+                </div>
+                <div class="form-group">
+                    <label for="dependente_parentesco_${index}">Parentesco do Dependente</label>
+                    <input type="text" class="form-control" id="dependente_parentesco_${index}" name="dependente_parentesco_${index}">
+                </div>
+                <button type="button" onclick="removerDependente(this)" class="btn btn-danger btn-sm mt-2">Remover Dependente</button>
+                <hr>
+            `;
+            document.getElementById('lista_dependentes').appendChild(novoDependenteDiv);
+            atualizarTitularNosDependentes();
+            atualizarContratoNosDependentes();
+        }
+
+        function removerDependente(botaoRemover) {
+            const dependenteDiv = botaoRemover.parentNode;
+            dependenteDiv.remove();
+            // Recalcula o contador de dependentes (opcional, para manter a numeração correta)
+            contadorDependentes = document.querySelectorAll('#lista_dependentes > div[id^="dependente_"]').length;
+            // Se não houver mais dependentes, e o "Possui Dependentes?" está como "Sim",
+            // você pode considerar redefinir o contador para zero ou ajustar a lógica de adição.
+            if (contadorDependentes === 0 && document.getElementById('tem_dependente').value === 'Sim') {
+                // Opcional: Se quiser que o botão "Adicionar Dependente" adicione o primeiro novamente
+                // contadorDependentes = 0;
+            }
+        }
+
+        // Adiciona os listeners para atualizar os campos readonly
+        document.addEventListener('DOMContentLoaded', function() {
+            const titularInput = document.getElementById('titular');
+            if (titularInput) {
+                titularInput.addEventListener('input', atualizarTitularNosDependentes);
+            }
+            const contratoInput = document.getElementById('cod_contrato');
+            if (contratoInput) {
+                contratoInput.addEventListener('input', atualizarContratoNosDependentes);
+            }
+            const temDependenteSelect = document.getElementById('tem_dependente');
+            if (temDependenteSelect) {
+                temDependenteSelect.addEventListener('change', mostrarDependentes);
+            }
+            // Inicializa a seção de dependentes se "Sim" estiver selecionado ao carregar a página
+            if (temDependenteSelect && temDependenteSelect.value === 'Sim') {
+                mostrarDependentes();
+            }
+        });
+    </script>
 </body>
 </html>
