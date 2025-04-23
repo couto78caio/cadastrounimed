@@ -120,7 +120,8 @@
         function mostrarDependentes() {
             const temDependente = document.getElementById('tem_dependente').value;
             const dependentesContainer = document.getElementById('dependentes_container');
-            if (temDependente === 'Sim') {dependentesContainer.style.display = 'block';
+            if (temDependente === 'Sim') {
+                dependentesContainer.style.display = 'block';
                 // Adiciona o primeiro dependente automaticamente ao mostrar a seção
                 if (contadorDependentes === 0) {
                     adicionarDependente();
