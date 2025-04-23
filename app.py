@@ -22,7 +22,7 @@ def calcular_idade(data_nascimento):
 def obter_preco(codigo_contrato, idade):
     try:
         tabela_precos = pd.read_csv(TABELA_PRECOS_PATH)
-        faixa = tabela_precos[(tabela_precos['codigo_contrato'] == codigo_contrato) & (tabela_precos['idade_min'] <= idade) & (tabela_precos['idade_max'] >= idade)]
+        faixa = tabela_precos[(tabela_precos['codigo_contrato'].str.strip() == codigo_contrato.strip()) & (tabela_precos['idade_min'] <= idade) & (tabela_precos['idade_max'] >= idade)]
         if not faixa.empty:
             return faixa['valor_mensal'].iloc[0], faixa['descricao'].iloc[0]
         return None, None
@@ -199,17 +199,6 @@ def salvar_csv():
         download_name=nome_arquivo,
         as_attachment=True
     )
-
-@app.route('/buscar_preco', methods=['POST'])
-def buscar_preco():
-    codigo_contrato = request.form.get('codigo_contrato')
-    idade = request.form.get('idade')
-
-    if codigo_contrato and idade:
-        valor, descricao = obter_preco(codigo_contrato, int(idade))
-        return jsonify({'valor': valor, 'descricao': descricao})
-    else:
-        return jsonify({'error': 'Código do contrato e idade são obrigatórios.'}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
