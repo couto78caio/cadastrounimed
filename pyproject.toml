@@ -5,9 +5,9 @@ description = "Formulário de cadastro de plano de saúde com Flask"
 authors = "Caio Couto"
 
 [tool.poetry.dependencies]
-python = "^3.9"  # Ou a versão do seu Python
-flask = "^2.0.0"  # Ou a versão que o Poetry escolheu
-pandas = "^1.3.0" # Ou a versão que o Poetry escolheu
+python = "^3.11"
+flask = "^2.3.3"
+pandas = "2.2.2"
 
 [build-system]
 requires = ["poetry-core"]
