@@ -2,23 +2,6 @@
 
 Este projeto consiste em uma aplicação web desenvolvida em Python utilizando o framework Flask. Ele permite o cadastro de titulares e seus dependentes em um plano de saúde, coletando informações detalhadas, calculando os valores dos planos com base na idade e em uma tabela de preços, exibindo um resumo do cadastro e, finalmente, salvando os dados em um arquivo CSV.
 
-## Estrutura do Projeto
-
-A estrutura de arquivos e pastas do projeto é a seguinte:
-
-projeto_saude/
-├── templates/
-│   ├── formulario_inicial.html  # Formulário inicial para dados do titular e opção de dependentes
-│   ├── resumo_cadastro.html    # Exibe o resumo de todas as informações preenchidas e os valores calculados
-│   └── exibir_idades.html      # Exibe as idades do titular e dependentes para confirmação
-├── static/
-│   ├── css/
-│   │   └── style.css           # Arquivo de estilos CSS para a interface
-│   └── js/
-│       └── form.js            # Arquivo JavaScript para funcionalidades dinâmicas no formulário
-├── tabela_precos.csv            # Arquivo CSV contendo a tabela de preços por código de contrato e faixa etária
-├── app.py                     # Arquivo principal da aplicação Flask (lógica do backend)
-└── pyproject.toml               # Arquivo de gerenciamento de dependências do Poetry
 
 ## Funcionalidades Detalhadas
 
