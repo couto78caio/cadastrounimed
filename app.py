@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
 import pandas as pd
 from datetime import datetime
 import io
@@ -31,60 +31,54 @@ def obter_preco(codigo_contrato, idade):
 
 @app.route('/', methods=['GET', 'POST'])
 def formulario_inicial():
-    if request.method == 'POST':
-        titular_data = {
-            'cod_contrato': request.form['cod_contrato'],
-            'cod_beneficiario': request.form['cod_beneficiario'],
-            'titular': request.form['titular'],
-            'sexo_titular': request.form['sexo_titular'],
-            'cpf_cnpj': request.form['cpf_cnpj'],
-            'dt_nascimento': request.form['dt_nascimento'],
-            'num_conta_corrente': request.form['num_conta_corrente'],
-            'num_telefone': request.form['num_telefone'],
-            'uf': request.form['uf'],
-            'cidade': request.form['cidade'],
-            'endereco': request.form['endereco'],
-            'dt_contrato': request.form['dt_contrato']
-        }
-        dependentes_data = []
-        i = 1
-        while True:
-            nome_dependente = request.form.get(f'dependente_nome_{i}')
-            if nome_dependente:
-                dependente = {
-                    'nome': nome_dependente,
-                    'sexo': request.form.get(f'sexo_dependente_{i}'),
-                    'cpf': request.form.get(f'dependente_cpf_{i}'),
-                    'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
-                    'parentesco': request.form.get(f'dependente_parentesco_{i}')
-                }
-                dependentes_data.append(dependente)
-                i += 1
-            else:
-                break
-        return redirect(url_for('exibir_idades', titular_data=titular_data, dependentes_data=dependentes_data))
     return render_template('formulario_inicial.html')
 
-@app.route('/idades', methods=['GET'])
+@app.route('/idades', methods=['POST'])
 def exibir_idades():
-    titular_data = request.args.get('titular_data')
-    dependentes_data = request.args.get('dependentes_data')
+    titular_data = {
+        'cod_contrato': request.form['cod_contrato'],
+        'cod_beneficiario': request.form['cod_beneficiario'],
+        'titular': request.form['titular'],
+        'sexo_titular': request.form['sexo_titular'],
+        'cpf_cnpj': request.form['cpf_cnpj'],
+        'dt_nascimento': request.form['dt_nascimento'],
+        'num_conta_corrente': request.form['num_conta_corrente'],
+        'num_telefone': request.form['num_telefone'],
+        'uf': request.form['uf'],
+        'cidade': request.form['cidade'],
+        'endereco': request.form['endereco'],
+        'dt_contrato': request.form['dt_contrato']
+    }
+    dependentes_data = []
+    i = 1
+    while True:
+        nome_dependente = request.form.get(f'dependente_nome_{i}')
+        if nome_dependente:
+            dependente = {
+                'nome': nome_dependente,
+                'sexo': request.form.get(f'sexo_dependente_{i}'),
+                'cpf': request.form.get(f'dependente_cpf_{i}'),
+                'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
+                'parentesco': request.form.get(f'dependente_parentesco_{i}')
+            }
+            dependentes_data.append(dependente)
+            i += 1
+        else:
+            break
 
-    if titular_data:
-        import json
-        titular_data = json.loads(titular_data.replace("'", "\""))
-        idade_titular = calcular_idade(titular_data['dt_nascimento'])
+    idade_titular = calcular_idade(titular_data['dt_nascimento'])
+    idades_dependentes = []
+    for dependente in dependentes_data:
+        idade_dependente = calcular_idade(dependente['dt_nascimento'])
+        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente})
 
-        idades_dependentes = []
-        if dependentes_data:
-            dependentes_data = json.loads(dependentes_data.replace("'", "\""))
-            for dependente in dependentes_data:
-                idade_dependente = calcular_idade(dependente['dt_nascimento'])
-                idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente})
+    try:
+        tabela_precos_df = pd.read_csv(TABELA_PRECOS_PATH)
+        tabela_precos_json = tabela_precos_df.to_dict(orient='records')
+    except FileNotFoundError:
+        tabela_precos_json = []
 
-        return render_template('exibir_idades.html', titular=titular_data, idade_titular=idade_titular, dependentes=idades_dependentes)
-    else:
-        return "Erro: Dados do titular não encontrados."
+    return render_template('exibir_idades.html', titular=titular_data, idade_titular=idade_titular, dependentes=idades_dependentes, tabela_precos_json=tabela_precos_json)
 
 @app.route('/resumo', methods=['POST'])
 def resumo_cadastro():
@@ -113,6 +107,12 @@ def resumo_cadastro():
     valor_titular, descricao_titular = obter_preco(codigo_contrato, idade_titular)
     valores_dependentes = []
     total = valor_titular if valor_titular else 0
+
+    for dependente in dependentes:
+        valor_dependente, descricao_dependente = obter_preco(codigo_contrato, dependente['idade'])
+        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente})
+        if valor_dependente:
+            total += valor_dependente
 
     return render_template('resumo_cadastro.html', titular=titular, idade_titular=idade_titular, valor_titular=valor_titular, descricao_titular=descricao_titular, dependentes=dependentes, valores_dependentes=valores_dependentes, total=total)
 
@@ -199,6 +199,17 @@ def salvar_csv():
         download_name=nome_arquivo,
         as_attachment=True
     )
+
+@app.route('/buscar_preco', methods=['POST'])
+def buscar_preco():
+    codigo_contrato = request.form.get('codigo_contrato')
+    idade = request.form.get('idade')
+
+    if codigo_contrato and idade:
+        valor, descricao = obter_preco(codigo_contrato, int(idade))
+        return jsonify({'valor': valor, 'descricao': descricao})
+    else:
+        return jsonify({'error': 'Código do contrato e idade são obrigatórios.'}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
