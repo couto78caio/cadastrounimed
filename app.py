@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, send_file
 import pandas as pd
 from datetime import datetime
 import io
+import re
 
 app = Flask(__name__)
 
 TABELA_PRECOS_PATH = 'tabela_precos.csv'
-ARQUIVO_CSV_FINAL = 'cadastro_planos_saude.csv'
 
 def calcular_idade(data_nascimento):
     if not data_nascimento:
@@ -114,12 +114,6 @@ def resumo_cadastro():
     valores_dependentes = []
     total = valor_titular if valor_titular else 0
 
-    for dependente in dependentes:
-        valor_dependente, descricao_dependente = obter_preco(codigo_contrato, dependente['idade'])
-        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente})
-        if valor_dependente:
-            total += valor_dependente
-
     return render_template('resumo_cadastro.html', titular=titular, idade_titular=idade_titular, valor_titular=valor_titular, descricao_titular=descricao_titular, dependentes=dependentes, valores_dependentes=valores_dependentes, total=total)
 
 @app.route('/salvar_csv', methods=['POST'])
@@ -188,18 +182,23 @@ def salvar_csv():
 
     df = pd.DataFrame(dados_para_csv)
 
+    # Limpar o nome do titular para usar no nome do arquivo (remover caracteres especiais e espaços)
+    nome_titular_limpo = re.sub(r'[^a-zA-Z0-9]', '_', titular['titular']).strip('_')
+    codigo_contrato = titular['cod_contrato'].strip()
+    nome_arquivo = f"cadastro_{nome_titular_limpo}_contrato_{codigo_contrato}.csv"
+
     # Salvar o DataFrame em memória (BytesIO)
     csv_data = io.BytesIO()
     df.to_csv(csv_data, index=False, encoding='utf-8')
     csv_data.seek(0)
 
-    # Enviar o arquivo como resposta para download
+    # Enviar o arquivo como resposta para download com o novo nome
     return send_file(
         csv_data,
         mimetype='text/csv',
-        download_name='cadastro_planos_saude.csv',
+        download_name=nome_arquivo,
         as_attachment=True
     )
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True) 
+    app.run(host='0.0.0.0', port=5000, debug=True)
