@@ -81,18 +81,18 @@
         const tabelaPrecos = {{ tabela_precos_json | tojson }};
 
         function exibirPrecos() {
-            const codigoContrato = document.getElementById('cod_contrato_exibir').value;
-            const idadeTitular = document.getElementById('idade_titular').value;
+            const codigoContrato = document.getElementById('cod_contrato_exibir').value.trim();
+            const idadeTitular = parseInt(document.getElementById('idade_titular').value);
             const valorTitularInput = document.getElementById('valor_titular');
             const descricaoTitularTextarea = document.getElementById('descricao_titular');
             const valorTitularHidden = document.getElementById('valor_titular_hidden');
             const descricaoTitularHidden = document.getElementById('descricao_titular_hidden');
 
-            if (codigoContrato && idadeTitular && tabelaPrecos) {
+            if (codigoContrato && !isNaN(idadeTitular) && tabelaPrecos) {
                 const precoTitularInfo = tabelaPrecos.find(item =>
-                    item.codigo_contrato === codigoContrato &&
-                    parseInt(idadeTitular) >= item.idade_min &&
-                    parseInt(idadeTitular) <= item.idade_max
+                    item.codigo_contrato.trim() === codigoContrato &&
+                    idadeTitular >= parseInt(item.idade_min) &&
+                    idadeTitular <= parseInt(item.idade_max)
                 );
 
                 if (precoTitularInfo) {
@@ -113,12 +113,12 @@
                         const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
                         const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}');
                         const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}');
-                        const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}');
+                        const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}';
 
                         const precoDependenteInfo{{ loop.index }} = tabelaPrecos.find(item =>
-                            item.codigo_contrato === codigoContrato &&
-                            idadeDependente{{ loop.index }} >= item.idade_min &&
-                            idadeDependente{{ loop.index }} <= item.idade_max
+                            item.codigo_contrato.trim() === codigoContrato &&
+                            idadeDependente{{ loop.index }} >= parseInt(item.idade_min) &&
+                            idadeDependente{{ loop.index }} <= parseInt(item.idade_max)
                         );
 
                         if (precoDependenteInfo{{ loop.index }}) {
@@ -144,7 +144,7 @@
                     {% for dependente in dependentes %}
                         const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
                         const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}');
-                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}');
+                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}';
                         const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}';
                         valorDependenteInput{{ loop.index }}.value = '';
                         descricaoDependenteTextarea{{ loop.index }}.value = '';
