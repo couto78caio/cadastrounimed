@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import pandas as pd
 from datetime import datetime
+import io
 
 app = Flask(__name__)
 
@@ -186,8 +187,19 @@ def salvar_csv():
         })
 
     df = pd.DataFrame(dados_para_csv)
-    df.to_csv(ARQUIVO_CSV_FINAL, index=False, encoding='utf-8')
-    return "Dados salvos com sucesso no arquivo CSV!"
+
+    # Salvar o DataFrame em memória (StringIO)
+    csv_data = io.StringIO()
+    df.to_csv(csv_data, index=False, encoding='utf-8')
+    csv_data.seek(0)
+
+    # Enviar o arquivo como resposta para download
+    return send_file(
+        csv_data,
+        mimetype='text/csv',
+        download_name='cadastro_planos_saude.csv',
+        as_attachment=True
+    )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
