@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>Formulário de Saúde</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/form.js') }}" defer></script>
+</head>
+<body>
+    <h1>Cadastro de Plano de Saúde</h1>
+    <form method="POST" action="/">
+        <h2>Dados do Titular</h2>
+        <div class="field"><label>Código do Contrato: <input type="text" name="cod_contrato" id="cod_contrato" oninput="atualizaContratoNosDependentes()" required></label></div>
+        <div class="field"><label>Código do Beneficiário: <input type="text" name="cod_beneficiario"></label></div>
+        <div class="field"><label>Titular: <input type="text" name="titular" id="titular" oninput="atualizaTitularNosDependentes()" required></label></div>
+        <div class="field"><label>Sexo do Titular: <select name="sexo_titular" id="sexo_titular">
+            <option value="">Selecione</option>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+            <option value="outro">Outro</option>
+        </select></label></div>
+        <div class="field"><label>CPF/CNPJ: <input type="text" name="cpf_cnpj" required></label></div>
+        <div class="field"><label>Data de Nascimento: <input type="date" name="dt_nascimento" required></label></div>
+        <div class="field"><label>Número da Conta Corrente: <input type="text" name="num_conta_corrente"></label></div>
+        <div class="field"><label>Número de Telefone: <input type="tel" name="num_telefone"></label></div>
+        <div class="field"><label>UF: <input type="text" name="uf" maxlength="2"></label></div>
+        <div class="field"><label>Cidade: <input type="text" name="cidade"></label></div>
+        <div class="field"><label>Endereço: <input type="text" name="endereco"></label></div>
+        <div class="field"><label>Data do Contrato: <input type="date" name="dt_contrato" required></label></div>
+
+        <h2>Dependentes</h2>
+        <div class="field">
+            <label>Possui Dependentes?
+                <select id="tem_dependente" onchange="mostrarDependentes()">
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </label>
+        </div>
+
+        <div id="dependentes_container" class="dependentes-section" style="display:none;">
+            <h3>Lista de Dependentes</h3>
+            <div id="lista_dependentes"></div>
+            <button type="button" onclick="adicionarDependente()">+ Adicionar Dependente</button>
+        </div>
+
+        <button type="submit">Próximo</button>
+    </form>
+
+    <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+</body>
+</html>
