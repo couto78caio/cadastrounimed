@@ -61,7 +61,7 @@
             {% if dependentes %}
                 {% for dependente in dependentes %}
                     <input type="hidden" name="dependente_nome_{{ dependente.index }}" value="{{ dependente.nome }}">
-                    <input type="hidden" name="dependente_cod_beneficiario_{{ dependente.index }}" value="{{ dependente.cod_beneficiario">
+                    <input type="hidden" name="dependente_cod_beneficiario_{{ dependente.index }}" value="{{ dependente.cod_beneficiario }}">
                     <input type="hidden" name="sexo_dependente_{{ dependente.index }}" value="{{ dependente.sexo }}">
                     <input type="hidden" name="dependente_cpf_{{ dependente.index }}" value="{{ dependente.cpf }}">
                     <input type="hidden" name="dependente_nasc_{{ dependente.index }}" value="{{ dependente.dt_nascimento }}">
