@@ -37,16 +37,16 @@ def formulario_inicial():
 def exibir_idades():
     titular_data = {
         'cod_contrato': request.form['cod_contrato'],
-        'cod_beneficiario': request.form['cod_beneficiario'],
+        'cod_beneficiario': request.form.get('cod_beneficiario', ''),
         'titular': request.form['titular'],
-        'sexo_titular': request.form['sexo_titular'],
+        'sexo_titular': request.form.get('sexo_titular', ''),
         'cpf_cnpj': request.form['cpf_cnpj'],
         'dt_nascimento': request.form['dt_nascimento'],
-        'num_conta_corrente': request.form['num_conta_corrente'],
-        'num_telefone': request.form['num_telefone'],
-        'uf': request.form['uf'],
-        'cidade': request.form['cidade'],
-        'endereco': request.form['endereco'],
+        'num_conta_corrente': request.form.get('num_conta_corrente', ''),
+        'num_telefone': request.form.get('num_telefone', ''),
+        'uf': request.form.get('uf', ''),
+        'cidade': request.form.get('cidade', ''),
+        'endereco': request.form.get('endereco', ''),
         'dt_contrato': request.form['dt_contrato']
     }
     dependentes_data = []
@@ -83,7 +83,7 @@ def exibir_idades():
                            valor_titular=valor_titular,
                            descricao_titular=descricao_titular,
                            dependentes=idades_dependentes,
-                           valores_dependentes=valores_dependentes_list, # Renomeado para clareza
+                           valores_dependentes=valores_dependentes_list,
                            tabela_precos_json=pd.read_csv(TABELA_PRECOS_PATH, dtype={'codigo_contrato': str}).to_dict(orient='records'))
 
 @app.route('/resumo', methods=['POST'])
@@ -148,16 +148,16 @@ def salvar_csv():
     dados_para_csv = [
         {
             'Código do Contrato': titular['cod_contrato'],
-            'Código do Beneficiário': titular['cod_beneficiario'],
+            'Código do Beneficiário': titular.get('cod_beneficiario', ''),
             'Titular': titular['titular'],
-            'Sexo Titular': titular['sexo_titular'],
+            'Sexo Titular': titular.get('sexo_titular', ''),
             'CPF/CNPJ': titular['cpf_cnpj'],
             'Data de Nascimento': titular['dt_nascimento'],
-            'Número da Conta Corrente': titular['num_conta_corrente'],
-            'Número de Telefone': titular['num_telefone'],
-            'UF': titular['uf'],
-            'Cidade': titular['cidade'],
-            'Endereço': titular['endereco'],
+            'Número da Conta Corrente': titular.get('num_conta_corrente', ''),
+            'Número de Telefone': titular.get('num_telefone', ''),
+            'UF': titular.get('uf', ''),
+            'Cidade': titular.get('cidade', ''),
+            'Endereço': titular.get('endereco', ''),
             'Data do Contrato': titular['dt_contrato'],
             'Idade Titular': request.form['idade_titular'],
             'Valor Titular': request.form['valor_titular'],
@@ -174,11 +174,11 @@ def salvar_csv():
             'Sexo Titular': '',
             'CPF/CNPJ': dep['CPF Dependente'],
             'Data de Nascimento': dep['Data de Nascimento Dependente'],
-            'Número da Conta Corrente': '',
-            'Número de Telefone': '',
-            'UF': '',
-            'Cidade': '',
-            'Endereço': '',
+            'Número da Conta Corrente': titular.get('num_conta_corrente', ''),
+            'Número de Telefone': titular.get('num_telefone', ''),
+            'UF': titular.get('uf', ''),
+            'Cidade': titular.get('cidade', ''),
+            'Endereço': titular.get('endereco', ''),
             'Data do Contrato': titular['dt_contrato'],
             'Idade Titular': dep['Idade Dependente'],
             'Valor Titular': dep['Valor Dependente'],
