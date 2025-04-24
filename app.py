@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
+from flask import Flask, render_template, request, send_file
 import pandas as pd
 from datetime import datetime
 import io
@@ -70,7 +70,7 @@ def exibir_idades():
     idades_dependentes = []
     for dependente in dependentes_data:
         idade_dependente = calcular_idade(dependente['dt_nascimento'])
-        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente})
+        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': loop.index0 + 1 if loop else i -1}) # Adicionando index para referenciar no template
 
     try:
         tabela_precos_df = pd.read_csv(TABELA_PRECOS_PATH)
