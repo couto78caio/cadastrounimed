@@ -149,6 +149,7 @@ def salvar_csv():
             break
 
     nome_titular = titular['titular']
+    sexo_titular = titular.get('sexo_titular', '')
     num_conta_corrente_titular = titular.get('num_conta_corrente', '')
     num_telefone_titular = titular.get('num_telefone', '')
     uf_titular = titular.get('uf', '')
@@ -158,49 +159,47 @@ def salvar_csv():
 
     dados_para_csv = [
         {
-            'Tipo': 'Titular',
-            'Nome': nome_titular,
-            'Titular': nome_titular,
             'Código do Contrato': titular['cod_contrato'],
             'Código do Beneficiário': titular.get('cod_beneficiario', ''),
-            'Sexo Titular': titular['sexo_titular'],
+            'Titular': nome_titular,
+            'Nome': nome_titular,
+            'Tipo': 'Titular',
+            'Parentesco': 'Titular'
+            'Sexo': sexo_titular,
             'CPF/CNPJ': titular['cpf_cnpj'],
-            'Data de Nascimento': titular['dt_nascimento'],
             'Número da Conta Corrente': num_conta_corrente_titular,
+            'Data de Nascimento': titular['dt_nascimento'],
+            'Idade': request.form['idade_titular'],
+            'Valor': request.form['valor_titular'],
+            'Descricao': request.form['descricao_titular'],
             'Número de Telefone': num_telefone_titular,
             'UF': uf_titular,
             'Cidade': cidade_titular,
             'Endereço': endereco_titular,
-            'Data do Contrato': data_contrato_titular,
-            'Idade Titular': request.form['idade_titular'],
-            'Valor Titular': request.form['valor_titular'],
-            'Descricao Titular': request.form['descricao_titular'],
-            'Parentesco': 'Titular',
-            'Total': request.form['total']
+            'Data do Contrato': data_contrato_titular
         }
     ]
 
     for dep in dependentes_data:
         dados_para_csv.append({
-            'Tipo': 'Dependente',
-            'Nome': dep['Nome Dependente'],
-            'Titular': nome_titular,
             'Código do Contrato': titular['cod_contrato'],
             'Código do Beneficiário': dep.get('Código Beneficiário Dependente', ''),
-            'Sexo Titular': dep['Sexo Dependente'],
+            'Titular': nome_titular,
+            'Nome': dep['Nome Dependente'],
+            'Tipo': 'Dependente',
+            'Parentesco': dep['Parentesco'],
+            'Sexo': dep['Sexo Dependente'],
             'CPF/CNPJ': dep['CPF Dependente'],
-            'Data de Nascimento': dep['Data de Nascimento Dependente'],
             'Número da Conta Corrente': num_conta_corrente_titular,
+            'Data de Nascimento': dep['Data de Nascimento Dependente'],
+            'Idade': dep['Idade Dependente'],
+            'Valor': dep['Valor Dependente'],
+            'Descricao': dep['Descricao Dependente'],
             'Número de Telefone': num_telefone_titular,
             'UF': uf_titular,
             'Cidade': cidade_titular,
             'Endereço': endereco_titular,
-            'Data do Contrato': data_contrato_titular,
-            'Idade Titular': dep['Idade Dependente'],
-            'Valor Titular': dep['Valor Dependente'],
-            'Descricao Titular': dep['Descricao Dependente'],
-            'Parentesco': dep['Parentesco'],
-            'Total': ''
+            'Data do Contrato': data_contrato_titular  
         })
 
     df = pd.DataFrame(dados_para_csv)
