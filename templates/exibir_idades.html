@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exibir Idades</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container mt-5">
@@ -21,11 +21,11 @@
             </div>
             <div class="form-group">
                 <label for="valor_titular">Valor Mensal:</label>
-                <input type="text" class="form-control" id="valor_titular" readonly>
+                <input type="text" class="form-control" id="valor_titular" value="{{ valor_titular if valor_titular is not none else '' }}" readonly>
             </div>
             <div class="form-group">
                 <label for="descricao_titular">Descrição do Plano:</label>
-                <textarea class="form-control" id="descricao_titular" rows="3" readonly></textarea>
+                <textarea class="form-control" id="descricao_titular" rows="3" readonly>{{ descricao_titular if descricao_titular else '' }}</textarea>
             </div>
         </div>
 
@@ -33,18 +33,14 @@
         <hr>
         <h2>Dependentes</h2>
         <ul>
-            {% for dependente in dependentes %}
+            {% for dependente, valor_info in zip(dependentes, valores_dependentes) %}
             <li>
                 <p>Nome: {{ dependente.nome }}</p>
                 <p>Data de Nascimento: {{ dependente.dt_nascimento }}</p>
                 <p>Idade: {{ dependente.idade }}</p>
                 <div class="form-group">
                     <label for="valor_dependente_{{ dependente.index }}">Valor Mensal:</label>
-                    <input type="text" class="form-control" id="valor_dependente_{{ dependente.index }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="descricao_dependente_{{ dependente.index }}">Descrição do Plano:</label>
-                    <textarea class="form-control" id="descricao_dependente_{{ dependente.index }}" rows="3" readonly></textarea>
+                    <input type="text" class="form-control" id="valor_dependente_{{ dependente.index }}" value="{{ valor_info.valor if valor_info.valor is not none else '' }}" readonly>
                 </div>
                 <hr>
             </li>
@@ -57,105 +53,24 @@
                 <input type="hidden" name="{{ key }}" value="{{ value }}">
             {% endfor %}
             <input type="hidden" name="idade_titular" value="{{ idade_titular }}">
+            <input type="hidden" name="valor_titular" value="{{ valor_titular if valor_titular is not none else '' }}">
+            <input type="hidden" name="descricao_titular" value="{{ descricao_titular if descricao_titular else '' }}">
 
             {% if dependentes %}
-                {% for dependente in dependentes %}
+                {% for dependente, valor_info in zip(dependentes, valores_dependentes) %}
                     <input type="hidden" name="dependente_nome_{{ dependente.index }}" value="{{ dependente.nome }}">
                     <input type="hidden" name="sexo_dependente_{{ dependente.index }}" value="{{ dependente.sexo }}">
                     <input type="hidden" name="dependente_cpf_{{ dependente.index }}" value="{{ dependente.cpf }}">
                     <input type="hidden" name="dependente_nasc_{{ dependente.index }}" value="{{ dependente.dt_nascimento }}">
                     <input type="hidden" name="dependente_parentesco_{{ dependente.index }}" value="{{ dependente.parentesco }}">
                     <input type="hidden" name="idade_dependente_{{ dependente.index }}" value="{{ dependente.idade }}">
-                    <input type="hidden" name="valor_dependente_{{ dependente.index }}" id="valor_dependente_hidden_{{ dependente.index }}">
-                    <input type="hidden" name="descricao_dependente_{{ dependente.index }}" id="descricao_dependente_hidden_{{ dependente.index }}">
+                    <input type="hidden" name="valor_dependente_{{ dependente.index }}" value="{{ valor_info.valor if valor_info.valor is not none else '' }}">
+                    <input type="hidden" name="descricao_dependente_{{ dependente.index }}" value="{{ valor_info.descricao if valor_info.descricao else '' }}">
                 {% endfor %}
             {% endif %}
-            <input type="hidden" name="valor_titular" id="valor_titular_hidden">
-            <input type="hidden" name="descricao_titular" id="descricao_titular_hidden">
 
             <button type="submit" class="btn btn-primary mt-3">Ver Resumo e Salvar</button>
         </form>
     </div>
-
-    <script>
-        const tabelaPrecos = {{ tabela_precos_json | tojson }};
-
-        function exibirPrecos() {
-            const codigoContrato = document.getElementById('cod_contrato_exibir').value.trim();
-            const idadeTitular = parseInt(document.getElementById('idade_titular').value);
-            const valorTitularInput = document.getElementById('valor_titular');
-            const descricaoTitularTextarea = document.getElementById('descricao_titular');
-            const valorTitularHidden = document.getElementById('valor_titular_hidden');
-            const descricaoTitularHidden = document.getElementById('descricao_titular_hidden');
-
-            if (codigoContrato && !isNaN(idadeTitular) && tabelaPrecos) {
-                const precoTitularInfo = tabelaPrecos.find(item =>
-                    item.codigo_contrato.trim() === codigoContrato &&
-                    idadeTitular >= parseInt(item.idade_min) &&
-                    idadeTitular <= parseInt(item.idade_max)
-                );
-
-                if (precoTitularInfo) {
-                    valorTitularInput.value = precoTitularInfo.valor_mensal;
-                    descricaoTitularTextarea.value = precoTitularInfo.descricao;
-                    valorTitularHidden.value = precoTitularInfo.valor_mensal;
-                    descricaoTitularHidden.value = precoTitularInfo.descricao;
-                } else {
-                    valorTitularInput.value = '';
-                    descricaoTitularTextarea.value = 'Nenhum preço encontrado para o titular.';
-                    valorTitularHidden.value = '';
-                    descricaoTitularHidden.value = '';
-                }
-
-                {% if dependentes %}
-                    {% for dependente in dependentes %}
-                        const idadeDependente{{ dependente.index }} = {{ dependente.idade }};
-                        const valorDependenteInput{{ dependente.index }} = document.getElementById('valor_dependente_{{ dependente.index }}');
-                        const descricaoDependenteTextarea{{ dependente.index }} = document.getElementById('descricao_dependente_{{ dependente.index }}');
-                        const valorDependenteHidden{{ dependente.index }} = document.getElementById('valor_dependente_hidden_{{ dependente.index }}';
-                        const descricaoDependenteHidden{{ dependente.index }} = document.getElementById('descricao_dependente_hidden_{{ dependente.index }}';
-
-                        const precoDependenteInfo{{ dependente.index }} = tabelaPrecos.find(item =>
-                            item.codigo_contrato.trim() === codigoContrato &&
-                            idadeDependente{{ dependente.index }} >= parseInt(item.idade_min) &&
-                            idadeDependente{{ dependente.index }} <= parseInt(item.idade_max)
-                        );
-
-                        if (precoDependenteInfo{{ dependente.index }}) {
-                            valorDependenteInput{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.valor_mensal;
-                            descricaoDependenteTextarea{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.descricao;
-                            valorDependenteHidden{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.valor_mensal;
-                            descricaoDependenteHidden{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.descricao;
-                        } else {
-                            valorDependenteInput{{ dependente.index }}.value = '';
-                            descricaoDependenteTextarea{{ dependente.index }}.value = 'Nenhum preço encontrado para o dependente.';
-                            valorDependenteHidden{{ dependente.index }}.value = '';
-                            descricaoDependenteHidden{{ dependente.index }}.value = '';
-                        }
-                    {% endfor %}
-                {% endif %}
-
-            } else {
-                valorTitularInput.value = '';
-                descricaoTitularTextarea.value = '';
-                valorTitularHidden.value = '';
-                descricaoTitularHidden.value = '';
-                {% if dependentes %}
-                    {% for dependente in dependentes %}
-                        const valorDependenteInput{{ dependente.index }} = document.getElementById('valor_dependente_{{ dependente.index }}');
-                        const descricaoDependenteTextarea{{ dependente.index }} = document.getElementById('descricao_dependente_{{ dependente.index }}';
-                        const valorDependenteHidden{{ dependente.index }} = document.getElementById('valor_dependente_hidden_{{ dependente.index }}';
-                        const descricaoDependenteHidden{{ dependente.index }} = document.getElementById('descricao_dependente_hidden_{{ dependente.index }}';
-                        valorDependenteInput{{ dependente.index }}.value = '';
-                        descricaoDependenteTextarea{{ dependente.index }}.value = '';
-                        valorDependenteHidden{{ dependente.index }}.value = '';
-                        descricaoDependenteHidden{{ dependente.index }}.value = '';
-                    {% endfor %}
-                {% endif %}
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', exibirPrecos);
-    </script>
 </body>
 </html>
