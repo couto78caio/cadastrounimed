@@ -70,12 +70,12 @@ def exibir_idades():
     valor_titular, descricao_titular = obter_preco(titular_data['cod_contrato'], idade_titular)
 
     idades_dependentes = []
-    valores_dependentes = []
+    valores_dependentes_list = []
     for index, dependente in enumerate(dependentes_data):
         idade_dependente = calcular_idade(dependente['dt_nascimento'])
         valor_dependente, descricao_dependente = obter_preco(titular_data['cod_contrato'], idade_dependente)
         idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': index + 1})
-        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente, 'index': index + 1})
+        valores_dependentes_list.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente, 'index': index + 1})
 
     return render_template('exibir_idades.html',
                            titular=titular_data,
@@ -83,7 +83,7 @@ def exibir_idades():
                            valor_titular=valor_titular,
                            descricao_titular=descricao_titular,
                            dependentes=idades_dependentes,
-                           valores_dependentes=valores_dependentes,
+                           valores_dependentes=valores_dependentes_list, # Renomeado para clareza
                            tabela_precos_json=pd.read_csv(TABELA_PRECOS_PATH, dtype={'codigo_contrato': str}).to_dict(orient='records'))
 
 @app.route('/resumo', methods=['POST'])
