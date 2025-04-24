@@ -163,7 +163,7 @@ def salvar_csv():
             'Titular': nome_titular,
             'Código do Contrato': titular['cod_contrato'],
             'Código do Beneficiário': titular.get('cod_beneficiario', ''),
-            'Sexo Titular': titular.get('sexo_titular', ''),
+            'Sexo Titular': titular['sexo_titular'],
             'CPF/CNPJ': titular['cpf_cnpj'],
             'Data de Nascimento': titular['dt_nascimento'],
             'Número da Conta Corrente': num_conta_corrente_titular,
