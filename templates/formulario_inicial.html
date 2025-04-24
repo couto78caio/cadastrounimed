@@ -16,7 +16,7 @@
                 <input type="text" class="form-control" id="cod_contrato" name="cod_contrato" required>
             </div>
             <div class="form-group">
-                <label for="cod_beneficiario">Código do Beneficiário</label>
+                <label for="cod_beneficiario">Código do Beneficiário (Titular)</label>
                 <input type="text" class="form-control" id="cod_beneficiario" name="cod_beneficiario">
             </div>
             <div class="form-group">
@@ -131,6 +131,10 @@
                 <div class="form-group">
                     <label for="dependente_nome_${index}">Nome do Dependente *</label>
                     <input type="text" class="form-control" id="dependente_nome_${index}" name="dependente_nome_${index}" required>
+                </div>
+                <div class="form-group">
+                    <label for="dependente_cod_beneficiario_${index}">Código do Beneficiário (Dependente)</label>
+                    <input type="text" class="form-control" id="dependente_cod_beneficiario_${index}" name="dependente_cod_beneficiario_${index}">
                 </div>
                 <div class="form-group">
                     <label for="sexo_dependente_${index}">Sexo do Dependente</label>
