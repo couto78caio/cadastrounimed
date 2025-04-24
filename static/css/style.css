@@ -88,6 +88,21 @@ textarea[readonly] {
     background-color: #1e7e34;
 }
 
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
 hr {
     border-top: 1px solid #ccc;
     margin-top: 20px;
