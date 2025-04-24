@@ -13,6 +13,7 @@
         <div>
             <h2>Titular</h2>
             <p>Nome: {{ titular.titular }}</p>
+            <p>Código do Beneficiário: {{ titular.cod_beneficiario }}</p>
             <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
             <p>Idade: <input type="text" id="idade_titular" value="{{ idade_titular }}" readonly></p>
             <div class="form-group">
@@ -36,6 +37,7 @@
             {% for dependente in dependentes %}
             <li>
                 <p>Nome: {{ dependente.nome }}</p>
+                <p>Código do Beneficiário: {{ dependente.cod_beneficiario }}</p>
                 <p>Data de Nascimento: {{ dependente.dt_nascimento }}</p>
                 <p>Idade: {{ dependente.idade }}</p>
                 <div class="form-group">
@@ -59,6 +61,7 @@
             {% if dependentes %}
                 {% for dependente in dependentes %}
                     <input type="hidden" name="dependente_nome_{{ dependente.index }}" value="{{ dependente.nome }}">
+                    <input type="hidden" name="dependente_cod_beneficiario_{{ dependente.index }}" value="{{ dependente.cod_beneficiario }}">
                     <input type="hidden" name="sexo_dependente_{{ dependente.index }}" value="{{ dependente.sexo }}">
                     <input type="hidden" name="dependente_cpf_{{ dependente.index }}" value="{{ dependente.cpf }}">
                     <input type="hidden" name="dependente_nasc_{{ dependente.index }}" value="{{ dependente.dt_nascimento }}">
