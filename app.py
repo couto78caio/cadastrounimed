@@ -67,18 +67,24 @@ def exibir_idades():
             break
 
     idade_titular = calcular_idade(titular_data['dt_nascimento'])
+    valor_titular, descricao_titular = obter_preco(titular_data['cod_contrato'], idade_titular)
+
     idades_dependentes = []
+    valores_dependentes = []
     for index, dependente in enumerate(dependentes_data):
         idade_dependente = calcular_idade(dependente['dt_nascimento'])
+        valor_dependente, descricao_dependente = obter_preco(titular_data['cod_contrato'], idade_dependente)
         idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': index + 1})
+        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente, 'index': index + 1})
 
-    try:
-        tabela_precos_df = pd.read_csv(TABELA_PRECOS_PATH)
-        tabela_precos_json = tabela_precos_df.to_dict(orient='records')
-    except FileNotFoundError:
-        tabela_precos_json = []
-
-    return render_template('exibir_idades.html', titular=titular_data, idade_titular=idade_titular, dependentes=idades_dependentes, tabela_precos_json=tabela_precos_json)
+    return render_template('exibir_idades.html',
+                           titular=titular_data,
+                           idade_titular=idade_titular,
+                           valor_titular=valor_titular,
+                           descricao_titular=descricao_titular,
+                           dependentes=idades_dependentes,
+                           valores_dependentes=valores_dependentes,
+                           tabela_precos_json=pd.read_csv(TABELA_PRECOS_PATH, dtype={'codigo_contrato': str}).to_dict(orient='records'))
 
 @app.route('/resumo', methods=['POST'])
 def resumo_cadastro():
