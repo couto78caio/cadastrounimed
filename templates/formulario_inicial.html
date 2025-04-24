@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Plano de Saúde</title>
+    <title>Formulário de Cadastro</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Cadastro de Plano de Saúde</h1>
+        <h1>Formulário de Cadastro</h1>
         <form method="POST" action="/idades">
-            <h2>Dados do Titular</h2>
             <div class="form-group">
                 <label for="cod_contrato">Código do Contrato *</label>
                 <input type="text" class="form-control" id="cod_contrato" name="cod_contrato" required>
@@ -21,7 +20,7 @@
                 <input type="text" class="form-control" id="cod_beneficiario" name="cod_beneficiario">
             </div>
             <div class="form-group">
-                <label for="titular">Nome do Titular *</label>
+                <label for="titular">Nome Completo do Titular *</label>
                 <input type="text" class="form-control" id="titular" name="titular" required>
             </div>
             <div class="form-group">
@@ -34,11 +33,11 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="cpf_cnpj">CPF/CNPJ *</label>
+                <label for="cpf_cnpj">CPF/CNPJ do Titular *</label>
                 <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj" required>
             </div>
             <div class="form-group">
-                <label for="dt_nascimento">Data de Nascimento *</label>
+                <label for="dt_nascimento">Data de Nascimento do Titular *</label>
                 <input type="date" class="form-control" id="dt_nascimento" name="dt_nascimento" required>
             </div>
             <div class="form-group">
@@ -47,40 +46,11 @@
             </div>
             <div class="form-group">
                 <label for="num_telefone">Número de Telefone</label>
-                <input type="tel" class="form-control" id="num_telefone" name="num_telefone">
+                <input type="text" class="form-control" id="num_telefone" name="num_telefone">
             </div>
             <div class="form-group">
                 <label for="uf">UF</label>
-                <select class="form-control" id="uf" name="uf">
-                    <option value="">Selecione</option>
-                    <option value="AC">AC</option>
-                    <option value="AL">AL</option>
-                    <option value="AP">AP</option>
-                    <option value="AM">AM</option>
-                    <option value="BA">BA</option>
-                    <option value="CE">CE</option>
-                    <option value="DF">DF</option>
-                    <option value="ES">ES</option>
-                    <option value="GO">GO</option>
-                    <option value="MA">MA</option>
-                    <option value="MT">MT</option>
-                    <option value="MS">MS</option>
-                    <option value="MG">MG</option>
-                    <option value="PA">PA</option>
-                    <option value="PB">PB</option>
-                    <option value="PR">PR</option>
-                    <option value="PE">PE</option>
-                    <option value="PI">PI</option>
-                    <option value="RJ">RJ</option>
-                    <option value="RN">RN</option>
-                    <option value="RS">RS</option>
-                    <option value="RO">RO</option>
-                    <option value="RR">RR</option>
-                    <option value="SC">SC</option>
-                    <option value="SP">SP</option>
-                    <option value="SE">SE</option>
-                    <option value="TO">TO</option>
-                </select>
+                <input type="text" class="form-control" id="uf" name="uf">
             </div>
             <div class="form-group">
                 <label for="cidade">Cidade</label>
@@ -96,9 +66,9 @@
             </div>
 
             <div class="form-group">
-                <label for="tem_dependente">Possui Dependentes?</label>
-                <select class="form-control" id="tem_dependente" onchange="mostrarDependentes()">
-                    <option value="Não" selected>Não</option>
+                <label for="tem_dependente">Tem dependente(s)?</label>
+                <select class="form-control" id="tem_dependente" name="tem_dependente" onchange="mostrarDependentes()">
+                    <option value="Não">Não</option>
                     <option value="Sim">Sim</option>
                 </select>
             </div>
@@ -107,16 +77,17 @@
                 <h2>Dependentes</h2>
                 <div id="lista_dependentes">
                     </div>
-                <button type="button" onclick="adicionarDependente()" class="btn btn-success btn-sm mt-2">+ Adicionar Dependente</button>
+                <button type="button" onclick="adicionarDependente()" class="btn btn-success mt-2">Adicionar Dependente</button>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Próximo</button>
+            <button type="submit" class="btn btn-primary mt-3">Calcular Idades</button>
         </form>
     </div>
 
     <script>
         let contadorDependentes = 0;
-        const parentescos = ["Filho(a)", "Cônjuge", "Pai", "Mãe", "Irmão(ã)", "Neto(a)", "Outro"];
+        const parentescos = [
+                "Cônjuge", "Pai", "Mãe", "Irmão(ã)", "Neto(a)", "Outro"];
 
         function mostrarDependentes() {
             const temDependente = document.getElementById('tem_dependente').value;
