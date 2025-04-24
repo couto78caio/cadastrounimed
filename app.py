@@ -75,7 +75,7 @@ def exibir_idades():
     for index, dependente in enumerate(dependentes_data):
         idade_dependente = calcular_idade(dependente['dt_nascimento'])
         valor_dependente, descricao_dependente = obter_preco(titular_data['cod_contrato'], idade_dependente)
-        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': index + 1, 'dt_nascimento': dependente['dt_nascimento'], 'cod_beneficiario': dependente['cod_beneficiario']})
+        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': index + 1, 'dt_nascimento': dependente['dt_nascimento'], 'cod_beneficiario': dependente['cod_beneficiario'], 'cpf': dependente['cpf'], 'parentesco': dependente['parentesco']})
         valores_dependentes_list.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente, 'index': index + 1})
 
     return render_template('exibir_idades.html',
@@ -176,7 +176,7 @@ def salvar_csv():
             'Titular': titular['titular'],
             'Sexo Titular': dep.get('Sexo Dependente', ''),
             'CPF/CNPJ': dep['CPF Dependente'],
-            'Parentesco': dep['Parentesco'], # Correção aqui
+            'Parentesco': dep['Parentesco'],
             'Data de Nascimento': dep['Data de Nascimento Dependente'],
             'Idade Titular': dep['Idade Dependente'],
             'Valor Titular': dep['Valor Dependente'],
