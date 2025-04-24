@@ -39,12 +39,12 @@
                 <p>Data de Nascimento: {{ dependente.dt_nascimento }}</p>
                 <p>Idade: {{ dependente.idade }}</p>
                 <div class="form-group">
-                    <label for="valor_dependente_{{ loop.index }}">Valor Mensal:</label>
-                    <input type="text" class="form-control" id="valor_dependente_{{ loop.index }}" readonly>
+                    <label for="valor_dependente_{{ dependente.index }}">Valor Mensal:</label>
+                    <input type="text" class="form-control" id="valor_dependente_{{ dependente.index }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="descricao_dependente_{{ loop.index }}">Descrição do Plano:</label>
-                    <textarea class="form-control" id="descricao_dependente_{{ loop.index }}" rows="3" readonly></textarea>
+                    <label for="descricao_dependente_{{ dependente.index }}">Descrição do Plano:</label>
+                    <textarea class="form-control" id="descricao_dependente_{{ dependente.index }}" rows="3" readonly></textarea>
                 </div>
                 <hr>
             </li>
@@ -60,14 +60,14 @@
 
             {% if dependentes %}
                 {% for dependente in dependentes %}
-                    <input type="hidden" name="dependente_nome_{{ loop.index }}" value="{{ dependente.nome }}">
-                    <input type="hidden" name="sexo_dependente_{{ loop.index }}" value="{{ dependente.sexo }}">
-                    <input type="hidden" name="dependente_cpf_{{ loop.index }}" value="{{ dependente.cpf }}">
-                    <input type="hidden" name="dependente_nasc_{{ loop.index }}" value="{{ dependente.dt_nascimento }}">
-                    <input type="hidden" name="dependente_parentesco_{{ loop.index }}" value="{{ dependente.parentesco }}">
-                    <input type="hidden" name="idade_dependente_{{ loop.index }}" value="{{ dependente.idade }}">
-                    <input type="hidden" name="valor_dependente_{{ loop.index }}" id="valor_dependente_hidden_{{ loop.index }}">
-                    <input type="hidden" name="descricao_dependente_{{ loop.index }}" id="descricao_dependente_hidden_{{ loop.index }}">
+                    <input type="hidden" name="dependente_nome_{{ dependente.index }}" value="{{ dependente.nome }}">
+                    <input type="hidden" name="sexo_dependente_{{ dependente.index }}" value="{{ dependente.sexo }}">
+                    <input type="hidden" name="dependente_cpf_{{ dependente.index }}" value="{{ dependente.cpf }}">
+                    <input type="hidden" name="dependente_nasc_{{ dependente.index }}" value="{{ dependente.dt_nascimento }}">
+                    <input type="hidden" name="dependente_parentesco_{{ dependente.index }}" value="{{ dependente.parentesco }}">
+                    <input type="hidden" name="idade_dependente_{{ dependente.index }}" value="{{ dependente.idade }}">
+                    <input type="hidden" name="valor_dependente_{{ dependente.index }}" id="valor_dependente_hidden_{{ dependente.index }}">
+                    <input type="hidden" name="descricao_dependente_{{ dependente.index }}" id="descricao_dependente_hidden_{{ dependente.index }}">
                 {% endfor %}
             {% endif %}
             <input type="hidden" name="valor_titular" id="valor_titular_hidden">
@@ -88,26 +88,19 @@
             const valorTitularHidden = document.getElementById('valor_titular_hidden');
             const descricaoTitularHidden = document.getElementById('descricao_titular_hidden');
 
-            console.log("Código do Contrato (HTML):", codigoContrato);
-            console.log("Idade do Titular (HTML):", idadeTitular);
-            console.log("Dados da Tabela de Preços:", tabelaPrecos);
-
             if (codigoContrato && !isNaN(idadeTitular) && tabelaPrecos) {
-                const precoTitularInfo = tabelaPrecos.find(item => {
-                    console.log("Comparando:", "Contrato CSV:", item.codigo_contrato.trim(), "==", codigoContrato, "Idade Min:", parseInt(item.idade_min), "<=", idadeTitular, "Idade Max:", parseInt(item.idade_max), ">=", idadeTitular);
-                    return item.codigo_contrato.trim() === codigoContrato &&
-                           idadeTitular >= parseInt(item.idade_min) &&
-                           idadeTitular <= parseInt(item.idade_max);
-                });
+                const precoTitularInfo = tabelaPrecos.find(item =>
+                    item.codigo_contrato.trim() === codigoContrato &&
+                    idadeTitular >= parseInt(item.idade_min) &&
+                    idadeTitular <= parseInt(item.idade_max)
+                );
 
                 if (precoTitularInfo) {
-                    console.log("Preço Encontrado:", precoTitularInfo);
                     valorTitularInput.value = precoTitularInfo.valor_mensal;
                     descricaoTitularTextarea.value = precoTitularInfo.descricao;
                     valorTitularHidden.value = precoTitularInfo.valor_mensal;
                     descricaoTitularHidden.value = precoTitularInfo.descricao;
                 } else {
-                    console.log("Nenhum preço encontrado para o titular.");
                     valorTitularInput.value = '';
                     descricaoTitularTextarea.value = 'Nenhum preço encontrado para o titular.';
                     valorTitularHidden.value = '';
@@ -116,28 +109,28 @@
 
                 {% if dependentes %}
                     {% for dependente in dependentes %}
-                        const idadeDependente{{ loop.index }} = {{ dependente.idade }};
-                        const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
-                        const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}');
-                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}';
-                        const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}';
+                        const idadeDependente{{ dependente.index }} = {{ dependente.idade }};
+                        const valorDependenteInput{{ dependente.index }} = document.getElementById('valor_dependente_{{ dependente.index }}');
+                        const descricaoDependenteTextarea{{ dependente.index }} = document.getElementById('descricao_dependente_{{ dependente.index }}');
+                        const valorDependenteHidden{{ dependente.index }} = document.getElementById('valor_dependente_hidden_{{ dependente.index }}';
+                        const descricaoDependenteHidden{{ dependente.index }} = document.getElementById('descricao_dependente_hidden_{{ dependente.index }}';
 
-                        const precoDependenteInfo{{ loop.index }} = tabelaPrecos.find(item => {
-                            return item.codigo_contrato.trim() === codigoContrato &&
-                                   idadeDependente{{ loop.index }} >= parseInt(item.idade_min) &&
-                                   idadeDependente{{ loop.index }} <= parseInt(item.idade_max);
-                        });
+                        const precoDependenteInfo{{ dependente.index }} = tabelaPrecos.find(item =>
+                            item.codigo_contrato.trim() === codigoContrato &&
+                            idadeDependente{{ dependente.index }} >= parseInt(item.idade_min) &&
+                            idadeDependente{{ dependente.index }} <= parseInt(item.idade_max)
+                        );
 
-                        if (precoDependenteInfo{{ loop.index }}) {
-                            valorDependenteInput{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.valor_mensal;
-                            descricaoDependenteTextarea{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.descricao;
-                            valorDependenteHidden{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.valor_mensal;
-                            descricaoDependenteHidden{{ loop.index }}.value = precoDependenteInfo{{ loop.index }}.descricao;
+                        if (precoDependenteInfo{{ dependente.index }}) {
+                            valorDependenteInput{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.valor_mensal;
+                            descricaoDependenteTextarea{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.descricao;
+                            valorDependenteHidden{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.valor_mensal;
+                            descricaoDependenteHidden{{ dependente.index }}.value = precoDependenteInfo{{ dependente.index }}.descricao;
                         } else {
-                            valorDependenteInput{{ loop.index }}.value = '';
-                            descricaoDependenteTextarea{{ loop.index }}.value = 'Nenhum preço encontrado para o dependente.';
-                            valorDependenteHidden{{ loop.index }}.value = '';
-                            descricaoDependenteHidden{{ loop.index }}.value = '';
+                            valorDependenteInput{{ dependente.index }}.value = '';
+                            descricaoDependenteTextarea{{ dependente.index }}.value = 'Nenhum preço encontrado para o dependente.';
+                            valorDependenteHidden{{ dependente.index }}.value = '';
+                            descricaoDependenteHidden{{ dependente.index }}.value = '';
                         }
                     {% endfor %}
                 {% endif %}
@@ -149,14 +142,14 @@
                 descricaoTitularHidden.value = '';
                 {% if dependentes %}
                     {% for dependente in dependentes %}
-                        const valorDependenteInput{{ loop.index }} = document.getElementById('valor_dependente_{{ loop.index }}');
-                        const descricaoDependenteTextarea{{ loop.index }} = document.getElementById('descricao_dependente_{{ loop.index }}';
-                        const valorDependenteHidden{{ loop.index }} = document.getElementById('valor_dependente_hidden_{{ loop.index }}';
-                        const descricaoDependenteHidden{{ loop.index }} = document.getElementById('descricao_dependente_hidden_{{ loop.index }}';
-                        valorDependenteInput{{ loop.index }}.value = '';
-                        descricaoDependenteTextarea{{ loop.index }}.value = '';
-                        valorDependenteHidden{{ loop.index }}.value = '';
-                        descricaoDependenteHidden{{ loop.index }}.value = '';
+                        const valorDependenteInput{{ dependente.index }} = document.getElementById('valor_dependente_{{ dependente.index }}');
+                        const descricaoDependenteTextarea{{ dependente.index }} = document.getElementById('descricao_dependente_{{ dependente.index }}';
+                        const valorDependenteHidden{{ dependente.index }} = document.getElementById('valor_dependente_hidden_{{ dependente.index }}';
+                        const descricaoDependenteHidden{{ dependente.index }} = document.getElementById('descricao_dependente_hidden_{{ dependente.index }}';
+                        valorDependenteInput{{ dependente.index }}.value = '';
+                        descricaoDependenteTextarea{{ dependente.index }}.value = '';
+                        valorDependenteHidden{{ dependente.index }}.value = '';
+                        descricaoDependenteHidden{{ dependente.index }}.value = '';
                     {% endfor %}
                 {% endif %}
             }
