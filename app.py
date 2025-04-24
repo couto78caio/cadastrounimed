@@ -47,8 +47,7 @@ def exibir_idades():
         'uf': request.form.get('uf', ''),
         'cidade': request.form.get('cidade', ''),
         'endereco': request.form.get('endereco', ''),
-        'dt_contrato': request.form['dt_contrato'],
-        'parentesco': request.form.get('dependente_parentesco', '')
+        'dt_contrato': request.form['dt_contrato']
     }
     dependentes_data = []
     i = 1
@@ -58,8 +57,8 @@ def exibir_idades():
             dependente = {
                 'nome': nome_dependente,
                 'cod_beneficiario': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'sexo_titular': request.form.get(f'sexo_dependente_{i}'),
-                'cpf_cnpj': request.form.get(f'dependente_cpf_{i}'),
+                'sexo': request.form.get(f'sexo_dependente_{i}'),
+                'cpf': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}')
             }
@@ -138,7 +137,6 @@ def salvar_csv():
                 'Código Beneficiário Dependente': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
                 'Sexo Dependente': request.form.get(f'sexo_dependente_{i}'),
                 'CPF Dependente': request.form.get(f'dependente_cpf_{i}'),
-                'parentesco': request.form.get(f'dependente_parentesco_{i}'),
                 'Data de Nascimento Dependente': request.form.get(f'dependente_nasc_{i}'),
                 'Parentesco': request.form.get(f'dependente_parentesco_{i}'),
                 'Idade Dependente': request.form.get(f'idade_dependente_{i}'),
@@ -157,7 +155,6 @@ def salvar_csv():
             'Titular': titular['titular'],
             'Sexo Titular': titular.get('sexo_titular', ''),
             'CPF/CNPJ': titular['cpf_cnpj'],
-            'parentesco': titular.get('dependente_parentesco_', ''),
             'Data de Nascimento': titular['dt_nascimento'],
             'Número da Conta Corrente': titular.get('num_conta_corrente', ''),
             'Número de Telefone': titular.get('num_telefone', ''),
@@ -179,17 +176,11 @@ def salvar_csv():
             'Titular': titular['titular'],
             'Sexo Titular': dep.get('Sexo Dependente', ''),
             'CPF/CNPJ': dep['CPF Dependente'],
-            'parentesco': dep['dependente_parentesco_'],
+            'Parentesco': dep['Parentesco'], # Correção aqui
             'Data de Nascimento': dep['Data de Nascimento Dependente'],
-            'Número da Conta Corrente': titular.get('num_conta_corrente', ''),
-            'Número de Telefone': titular.get('num_telefone', ''),
-            'UF': titular.get('uf', ''),
-            'Cidade': titular.get('cidade', ''),
-            'Endereço': titular.get('endereco', ''),
-            'Data do Contrato': titular['dt_contrato'],
-            'Idade Titular': request.form['Idade Dependente'],
-            'Valor Titular': request.form['Valor Dependente'],
-            'Descricao Titular': request.form['Descricao Dependente'],
+            'Idade Titular': dep['Idade Dependente'],
+            'Valor Titular': dep['Valor Dependente'],
+            'Descricao Titular': dep['Descricao Dependente'],
             'Total': ''
         })
 
