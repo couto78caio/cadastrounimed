@@ -12,14 +12,23 @@
         <h1>Resumo do Cadastro</h1>
         <div>
             <h2>Dados do Titular</h2>
+            <hr>
             <p>Nome: {{ titular.titular }}</p>
             <p>Código do Beneficiário: {{ titular.cod_beneficiario }}</p>
             <p>CPF/CNPJ: {{ titular.cpf_cnpj }}</p>
+            <p>Número da Conta Corrente: {{ titular.num_conta_corrente }}</p>
             <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
             <p>Idade: {{ idade_titular }}</p>
+            <p>Sexo: {{ titular.sexo_titular }}</p>
+            <p>Número de Telefone: {{ titular.num_telefone }}</p>
+            <p>UF: {{ titular.uf }}</p>
+            <p>Cidade: {{ titular.cidade }}</p>
+            <p>Endereço: {{ titular.endereco }}</p>
+            <hr>
+            <p>Descrição do Plano: {{ descricao_titular }}</p>
             <p>Código do Contrato: {{ titular.cod_contrato }}</p>
             <p>Valor do Plano: {{ valor_titular }}</p>
-            <p>Descrição do Plano: {{ descricao_titular }}</p>
+            <p>Data do Contrato: {{ titular.dt_contrato }}</p>
         </div>
 
         {% if dependentes %}
@@ -34,8 +43,10 @@
                 <p>Data de Nascimento: {{ dependentes[i].dt_nascimento }}</p>
                 <p>Idade: {{ dependentes[i].idade }}</p>
                 <p>Parentesco: {{ dependentes[i].parentesco }}</p>
-                <p>Valor do Plano: {{ valores_dependentes[i].valor }}</p>
+                <hr>
                 <p>Descrição do Plano: {{ valores_dependentes[i].descricao }}</p>
+                <p>Código do Contrato: {{ titular.cod_contrato }}</p>
+                <p>Valor do Plano: {{ valores_dependentes[i].valor }}</p>
             </li>
             {% endfor %}
         </ul>
