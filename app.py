@@ -57,7 +57,7 @@ def exibir_idades():
             dependente = {
                 'nome': nome_dependente,
                 'cod_beneficiario': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'sexo': request.form.get(f'sexo_dependente_{i}'),
+                'sexo_dependente': request.form.get(f'sexo_dependente_{i}'),
                 'cpf': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}')
@@ -75,7 +75,7 @@ def exibir_idades():
     for index, dependente in enumerate(dependentes_data):
         idade_dependente = calcular_idade(dependente['dt_nascimento'])
         valor_dependente, descricao_dependente = obter_preco(titular_data['cod_contrato'], idade_dependente)
-        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': index + 1, 'dt_nascimento': dependente['dt_nascimento'], 'cod_beneficiario': dependente['cod_beneficiario'], 'cpf': dependente['cpf'], 'parentesco': dependente['parentesco']})
+        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': index + 1, 'dt_nascimento': dependente['dt_nascimento'], 'cod_beneficiario': dependente['cod_beneficiario'], 'cpf': dependente['cpf'], 'parentesco': dependente['parentesco'], 'sexo_dependente': dependente['sexo_dependente']})
         valores_dependentes_list.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente, 'index': index + 1})
 
     return render_template('exibir_idades.html',
@@ -98,7 +98,7 @@ def resumo_cadastro():
             dependente = {
                 'nome': nome_dependente,
                 'cod_beneficiario': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'sexo': request.form.get(f'sexo_dependente_{i}'),
+                'sexo_dependente': request.form.get(f'sexo_dependente_{i}'),
                 'cpf': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}'),
@@ -165,6 +165,7 @@ def salvar_csv():
             'Idade Titular': request.form['idade_titular'],
             'Valor Titular': request.form['valor_titular'],
             'Descricao Titular': request.form['descricao_titular'],
+            'Parentesco': 'Titular',
             'Total': request.form['total']
         }
     ]
@@ -176,11 +177,17 @@ def salvar_csv():
             'Titular': titular['titular'],
             'Sexo Titular': dep.get('Sexo Dependente', ''),
             'CPF/CNPJ': dep['CPF Dependente'],
-            'Parentesco': dep['Parentesco'],
             'Data de Nascimento': dep['Data de Nascimento Dependente'],
+            'Número da Conta Corrente': titular.get('num_conta_corrente', ''),
+            'Número de Telefone': titular.get('num_telefone', ''),
+            'UF': titular.get('uf', ''),
+            'Cidade': titular.get('cidade', ''),
+            'Endereço': titular.get('endereco', ''),
+            'Data do Contrato': titular['dt_contrato'],
             'Idade Titular': dep['Idade Dependente'],
             'Valor Titular': dep['Valor Dependente'],
             'Descricao Titular': dep['Descricao Dependente'],
+            'Parentesco': dep['Parentesco'],
             'Total': ''
         })
 
