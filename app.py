@@ -68,9 +68,9 @@ def exibir_idades():
 
     idade_titular = calcular_idade(titular_data['dt_nascimento'])
     idades_dependentes = []
-    for dependente in dependentes_data:
+    for index, dependente in enumerate(dependentes_data):
         idade_dependente = calcular_idade(dependente['dt_nascimento'])
-        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': loop.index0 + 1 if loop else i -1}) # Adicionando index para referenciar no template
+        idades_dependentes.append({'nome': dependente['nome'], 'idade': idade_dependente, 'index': index + 1})
 
     try:
         tabela_precos_df = pd.read_csv(TABELA_PRECOS_PATH)
