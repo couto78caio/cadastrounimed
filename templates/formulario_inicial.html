@@ -116,6 +116,7 @@
 
     <script>
         let contadorDependentes = 0;
+        const parentescos = ["Filho(a)", "Cônjuge", "Pai", "Mãe", "Irmão(ã)", "Neto(a)", "Outro"];
 
         function mostrarDependentes() {
             const temDependente = document.getElementById('tem_dependente').value;
@@ -129,11 +130,12 @@
             } else {
                 dependentesContainer.style.display = 'none';
                 document.getElementById('lista_dependentes').innerHTML = ''; // Limpa os dependentes
-                contadorDependentes = 0;
+                contadorDependentes = 0; // Reinicia o contador
             }
         }
 
-        function atualizarTitularNosDependentes() {const titularNome = document.getElementById('titular').value;
+        function atualizarTitularNosDependentes() {
+            const titularNome = document.getElementById('titular').value;
             const elementosTitularDependente = document.querySelectorAll('[readonly][id^="dependente_titular_"]');
             elementosTitularDependente.forEach(elemento => {
                 elemento.value = titularNome;
@@ -178,7 +180,10 @@
                 </div>
                 <div class="form-group">
                     <label for="dependente_parentesco_${index}">Parentesco do Dependente</label>
-                    <input type="text" class="form-control" id="dependente_parentesco_${index}" name="dependente_parentesco_${index}">
+                    <select class="form-control" id="dependente_parentesco_${index}" name="dependente_parentesco_${index}">
+                        <option value="">Selecione</option>
+                        ${parentescos.map(parentesco => `<option value="${parentesco}">${parentesco}</option>`).join('')}
+                    </select>
                 </div>
                 <button type="button" onclick="removerDependente(this)" class="btn btn-danger btn-sm mt-2">Remover Dependente</button>
                 <hr>
@@ -191,10 +196,7 @@
         function removerDependente(botaoRemover) {
             const dependenteDiv = botaoRemover.parentNode;
             dependenteDiv.remove();
-            // Recalcula o contador de dependentes (opcional, para manter a numeração correta)
             contadorDependentes = document.querySelectorAll('#lista_dependentes > div[id^="dependente_"]').length;
-            // Se não houver mais dependentes, e o "Possui Dependentes?" está como "Sim",
-            // você pode considerar redefinir o contador para zero ou ajustar a lógica de adição.
             if (contadorDependentes === 0 && document.getElementById('tem_dependente').value === 'Sim') {
                 // Opcional: Se quiser que o botão "Adicionar Dependente" adicione o primeiro novamente
                 // contadorDependentes = 0;
