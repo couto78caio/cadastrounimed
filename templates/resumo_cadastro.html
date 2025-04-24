@@ -13,6 +13,7 @@
         <div>
             <h2>Dados do Titular</h2>
             <p>Nome: {{ titular.titular }}</p>
+            <p>Código do Beneficiário: {{ titular.cod_beneficiario }}</p>
             <p>CPF/CNPJ: {{ titular.cpf_cnpj }}</p>
             <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
             <p>Idade: {{ idade_titular }}</p>
@@ -28,6 +29,7 @@
             {% for i in range(dependentes|length) %}
             <li>
                 <p>Nome: {{ dependentes[i].nome }}</p>
+                <p>Código do Beneficiário: {{ dependentes[i].cod_beneficiario }}</p>
                 <p>CPF: {{ dependentes[i].cpf }}</p>
                 <p>Data de Nascimento: {{ dependentes[i].dt_nascimento }}</p>
                 <p>Idade: {{ dependentes[i].idade }}</p>
@@ -55,6 +57,7 @@
             {% if dependentes %}
                 {% for i in range(dependentes|length) %}
                     <input type="hidden" name="dependente_nome_{{ i + 1 }}" value="{{ dependentes[i].nome }}">
+                    <input type="hidden" name="dependente_cod_beneficiario_{{ i + 1 }}" value="{{ dependentes[i].cod_beneficiario }}">
                     <input type="hidden" name="sexo_dependente_{{ i + 1 }}" value="{{ dependentes[i].sexo }}">
                     <input type="hidden" name="dependente_cpf_{{ i + 1 }}" value="{{ dependentes[i].cpf }}">
                     <input type="hidden" name="dependente_nasc_{{ i + 1 }}" value="{{ dependentes[i].dt_nascimento }}">
