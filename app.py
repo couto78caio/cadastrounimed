@@ -21,7 +21,7 @@ def calcular_idade(data_nascimento):
 
 def obter_preco(codigo_contrato, idade):
     try:
-        tabela_precos = pd.read_csv(TABELA_PRECOS_PATH)
+        tabela_precos = pd.read_csv(TABELA_PRECOS_PATH, dtype={'codigo_contrato': str})
         faixa = tabela_precos[(tabela_precos['codigo_contrato'].str.strip() == codigo_contrato.strip()) & (tabela_precos['idade_min'] <= idade) & (tabela_precos['idade_max'] >= idade)]
         if not faixa.empty:
             return faixa['valor_mensal'].iloc[0], faixa['descricao'].iloc[0]
