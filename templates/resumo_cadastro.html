@@ -1,65 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resumo do Cadastro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Resumo do Cadastro</h1>
+    <div class="container mt-5">
+        <h1>Resumo do Cadastro</h1>
+        <div>
+            <h2>Titular</h2>
+            <p>Nome: {{ titular.titular }}</p>
+            <p>Data de Nascimento: {{ titular.dt_nascimento }} (Idade: {{ idade_titular }})</p>
+            <p>Código do Contrato: {{ titular.cod_contrato }}</p>
+            <p>Valor Mensal: {{ valor_titular if valor_titular is not none else 'Não encontrado' }}</p>
+            <p>Descrição do Plano: {{ descricao_titular if descricao_titular else 'Não encontrada' }}</p>
+        </div>
 
-    <h2>Dados do Titular</h2>
-    <p>Código do Contrato: {{ titular.cod_contrato }}</p>
-    <p>Código do Beneficiário: {{ titular.cod_beneficiario }}</p>
-    <p>Titular: {{ titular.titular }}</p>
-    <p>Sexo: {{ titular.sexo_titular }}</p>
-    <p>CPF/CNPJ: {{ titular.cpf_cnpj }}</p>
-    <p>Data de Nascimento: {{ titular.dt_nascimento }} ({{ idade_titular }} anos)</p>
-    <p>Número da Conta Corrente: {{ titular.num_conta_corrente }}</p>
-    <p>Número de Telefone: {{ titular.num_telefone }}</p>
-    <p>UF: {{ titular.uf }}</p>
-    <p>Cidade: {{ titular.cidade }}</p>
-    <p>Endereço: {{ titular.endereco }}</p>
-    <p>Data do Contrato: {{ titular.dt_contrato }}</p>
-    <p>Plano: {% if descricao_titular %}{{ descricao_titular }}{% else %}Não encontrado{% endif %}</p>
-    <p>Valor Individual: {% if valor_titular is not none %}R$ {{ "{:.2f}".format(valor_titular) }}{% else %}Valor não encontrado{% endif %}</p>
-
-    {% if dependentes %}
-    <h2>Dependentes</h2>
-    <ul>
-        {% for dependente, valor_dep in zip(dependentes, valores_dependentes) %}
-        <li>
-            Nome: {{ dependente.nome }} ({{ dependente.idade }} anos) - Parentesco: {{ dependente.parentesco }}<br>
-            Plano: {% if valor_dep.descricao %}{{ valor_dep.descricao }}{% else %}Não encontrado{% endif %}<br>
-            Valor Individual: {% if valor_dep.valor is not none %}R$ {{ "{:.2f}".format(valor_dep.valor) }}{% else %}Valor não encontrado{% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    <h2>Valor Total: R$ {{ "{:.2f}".format(total) }}</h2>
-
-    <form method="POST" action="{{ url_for('salvar_csv') }}">
-        <h3>Confirmar e Salvar Cadastro</h3>
-        {% for key, value in titular.items() %}
-            <input type="hidden" name="{{ key }}" value="{{ value }}">
-        {% endfor %}
-        <input type="hidden" name="idade_titular" value="{{ idade_titular }}">
-        <input type="hidden" name="valor_titular" value="{{ valor_titular if valor_titular is not none else 0 }}">
-        <input type="hidden" name="descricao_titular" value="{{ descricao_titular if descricao_titular else '' }}">
-        <input type="hidden" name="total" value="{{ total }}">
         {% if dependentes %}
-            {% for dependente, valor_dep in zip(dependentes, valores_dependentes) %}
-                {% for key, value in dependente.items() %}
-                    <input type="hidden" name="dependente_{{ key }}_{loop.index}" value="{{ value }}">
-                {% endfor %}
-                <input type="hidden" name="idade_dependente_{{ loop.index }}" value="{{ dependente.idade }}">
-                <input type="hidden" name="valor_dependente_{{ loop.index }}" value="{{ valor_dep.valor if valor_dep.valor is not none else 0 }}">
-                <input type="hidden" name="descricao_dependente_{{ loop.index }}" value="{{ valor_dep.descricao if valor_dep.descricao else '' }}">
+        <hr>
+        <h2>Dependentes</h2>
+        <ul>
+            {% for dependente, valor_info in zip(dependentes, valores_dependentes) %}
+            <li>
+                <p>Nome: {{ dependente.nome }} (Idade: {{ dependente.idade }})</p>
+                <p>Parentesco: {{ dependente.parentesco }}</p>
+                <p>Valor Mensal: {{ valor_info.valor if valor_info.valor is not none else 'Não encontrado' }}</p>
+                <p>Descrição do Plano: {{ valor_info.descricao if valor_info.descricao else 'Não encontrada' }}</p>
+                <hr>
+            </li>
             {% endfor %}
+        </ul>
         {% endif %}
-        <button type="submit">Salvar em CSV</button>
-    </form>
 
-    <a href="{{ url_for('exibir_idades', titular_data=request.form.get('titular_data'), dependentes_data=request.form.get('dependentes_data')) }}">Voltar para Editar Idades</a>
+        <h3>Total Mensal: {{ total if total is not none else 'Não calculado' }}</h3>
+
+        <form method="POST" action="/salvar_csv">
+            {% for key, value in titular.items() %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <input type="hidden" name="idade_titular" value="{{ idade_titular }}">
+            <input type="hidden" name="valor_titular" value="{{ valor_titular if valor_titular is not none else '' }}">
+            <input type="hidden" name="descricao_titular" value="{{ descricao_titular if descricao_titular else '' }}">
+            <input type="hidden" name="total" value="{{ total if total is not none else '' }}">
+
+            {% if dependentes %}
+                {% for dependente, valor_info in zip(dependentes, valores_dependentes) %}
+                    <input type="hidden" name="dependente_nome_{{ loop.index }}" value="{{ dependente.nome }}">
+                    <input type="hidden" name="sexo_dependente_{{ loop.index }}" value="{{ dependente.sexo }}">
+                    <input type="hidden" name="dependente_cpf_{{ loop.index }}" value="{{ dependente.cpf }}">
+                    <input type="hidden" name="dependente_nasc_{{ loop.index }}" value="{{ dependente.dt_nascimento }}">
+                    <input type="hidden" name="dependente_parentesco_{{ loop.index }}" value="{{ dependente.parentesco }}">
+                    <input type="hidden" name="idade_dependente_{{ loop.index }}" value="{{ dependente.idade }}">
+                    <input type="hidden" name="valor_dependente_{{ loop.index }}" value="{{ valor_info.valor if valor_info.valor is not none else '' }}">
+                    <input type="hidden" name="descricao_dependente_{{ loop.index }}" value="{{ valor_info.descricao if valor_info.descricao else '' }}">
+                {% endfor %}
+            {% endif %}
+
+            <button type="submit" class="btn btn-success mt-3">Salvar Cadastro em CSV</button>
+            <a href="/" class="btn btn-secondary mt-3 ml-2">Voltar ao Formulário</a>
+        </form>
+    </div>
 </body>
 </html>
