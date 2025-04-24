@@ -48,6 +48,7 @@ def exibir_idades():
         'cidade': request.form.get('cidade', ''),
         'endereco': request.form.get('endereco', ''),
         'dt_contrato': request.form['dt_contrato']
+        'parentesco': request.form.get('dependente_parentesco', '')
     }
     dependentes_data = []
     i = 1
@@ -57,8 +58,8 @@ def exibir_idades():
             dependente = {
                 'nome': nome_dependente,
                 'cod_beneficiario': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'sexo': request.form.get(f'sexo_dependente_{i}'),
-                'cpf': request.form.get(f'dependente_cpf_{i}'),
+                'sexo_titular': request.form.get(f'sexo_dependente_{i}'),
+                'cpf_cnpj': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}')
             }
