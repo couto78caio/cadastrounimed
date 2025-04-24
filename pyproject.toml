@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "projeto_saude"
+name = "cadastrounimed"
 version = "0.1.0"
 description = "Formulário de cadastro de plano de saúde com Flask"
 authors = ["Caio Couto <caiofelipecoutoramosesilva@gmail.com>"]
