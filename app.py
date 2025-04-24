@@ -164,7 +164,7 @@ def salvar_csv():
             'Titular': nome_titular,
             'Nome': nome_titular,
             'Tipo': 'Titular',
-            'Parentesco': 'Titular'
+            'Parentesco': 'Titular',
             'Sexo': sexo_titular,
             'CPF/CNPJ': titular['cpf_cnpj'],
             'Número da Conta Corrente': num_conta_corrente_titular,
