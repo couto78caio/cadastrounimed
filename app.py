@@ -150,9 +150,9 @@ def salvar_csv():
 
     dados_para_csv = [
         {
+            'Nome': titular['titular'],
             'Código do Contrato': titular['cod_contrato'],
             'Código do Beneficiário': titular.get('cod_beneficiario', ''),
-            'Titular': titular['titular'],
             'Sexo Titular': titular.get('sexo_titular', ''),
             'CPF/CNPJ': titular['cpf_cnpj'],
             'Data de Nascimento': titular['dt_nascimento'],
@@ -172,9 +172,9 @@ def salvar_csv():
 
     for dep in dependentes_data:
         dados_para_csv.append({
+            'Nome': dep['Nome Dependente'],
             'Código do Contrato': titular['cod_contrato'],
             'Código do Beneficiário': dep.get('Código Beneficiário Dependente', ''),
-            'Titular': titular['titular'],
             'Sexo Titular': dep.get('Sexo Dependente', ''),
             'CPF/CNPJ': dep['CPF Dependente'],
             'Data de Nascimento': dep['Data de Nascimento Dependente'],
