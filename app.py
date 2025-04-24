@@ -187,7 +187,7 @@ def salvar_csv():
             'Titular': nome_titular,
             'Código do Contrato': titular['cod_contrato'],
             'Código do Beneficiário': dep.get('Código Beneficiário Dependente', ''),
-            'Sexo Titular': dep.get('Sexo Dependente', ''),
+            'Sexo Titular': dep['Sexo Dependente'],
             'CPF/CNPJ': dep['CPF Dependente'],
             'Data de Nascimento': dep['Data de Nascimento Dependente'],
             'Número da Conta Corrente': num_conta_corrente_titular,
