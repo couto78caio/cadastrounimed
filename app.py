@@ -199,8 +199,8 @@ def salvar_csv():
             'VL_PLANO': request.form['valor_titular'],
             'DESC_PLANO': descricao_titular,
             'PARENTESCO': 'Titular',
-            'DEPENDENTES': '-'.join(dependentes_nomes) if dependentes_nomes else '',
-            'CPF_DEPEND': '-'.join(dependentes_cpfs) if dependentes_cpfs else '',
+            'DEPENDENTES': '',
+            'CPF_DEPEND': '',
             'CIDADE': cidade_titular,
             'Total': total_valor
         }
