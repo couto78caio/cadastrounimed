@@ -239,13 +239,13 @@ def salvar_csv():
 
     # Salvar o DataFrame em memória (BytesIO)
     csv_data = io.BytesIO()
-    df.to_csv(csv_data, index=False, encoding='utf-8')
-    csv_data.seek(0)
+    df.to_excel(excel_data, index=False, sheet_name='Dados', engine='openpyxl')
+    excel_data.seek(0)
 
     # Enviar o arquivo como resposta para download com o novo nome
     return send_file(
-        csv_data,
-        mimetype='text/csv',
+        excel_data,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         download_name=nome_arquivo,
         as_attachment=True
     )
