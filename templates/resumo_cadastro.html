@@ -24,7 +24,7 @@
             <p>UF: {{ titular.uf }}</p>
             <p>Cidade: {{ titular.cidade }}</p>
             <p>Endereço: {{ titular.endereco }}</p>
-            <p>Data do Contrato: {{ titular.dt_contrato }}</p>
+            <p>Data do Contrato: <span data-date-iso="{{ titular.dt_contrato }}"></span></p>
             <p>Idade: {{ idade_titular }}</p>
             <p>Valor Mensal: {{ valor_titular if valor_titular is not none else 'Não Calculado' }}</p>
             <p>Descrição do Plano: {{ descricao_titular if descricao_titular else 'Nenhuma' }}</p>
