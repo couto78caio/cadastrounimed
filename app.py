@@ -109,18 +109,14 @@ def resumo_cadastro():
         else:
             break
 
+    print("Conteúdo do request.form em /resumo:", request.form) # DEBUGGING LINE
+
     idade_titular = int(request.form['idade_titular'])
     codigo_contrato = titular['cod_contrato']
 
     valor_titular, descricao_titular = obter_preco(codigo_contrato, idade_titular)
     valores_dependentes = []
     total = valor_titular if valor_titular else 0
-
-    for dependente in dependentes:
-        valor_dependente, descricao_dependente = obter_preco(codigo_contrato, dependente['idade'])
-        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente})
-        if valor_dependente:
-            total += valor_dependente
 
     return render_template('resumo_cadastro.html', titular=titular, idade_titular=idade_titular, valor_titular=valor_titular, descricao_titular=descricao_titular, dependentes=dependentes, valores_dependentes=valores_dependentes, total=total)
 
