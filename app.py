@@ -170,7 +170,6 @@ def salvar_csv():
     dados_para_csv = [
         {
             'CATEGORIA': 'Titular',
-            'Nome': nome_titular,
             'TITULAR': nome_titular,
             'COD_CONTRATO': cod_contrato,
             'COD_BENEFICIARIO': cod_beneficiario_titular,
