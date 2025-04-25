@@ -230,12 +230,12 @@ def salvar_csv():
             'Total': ''
         })
 
-    df = pd.DataFrame(dados_para_csv)
+    df = pd.DataFrame(dados_para_excel)
 
     # Limpar o nome do titular para usar no nome do arquivo (remover caracteres especiais e espaços)
     nome_titular_limpo = re.sub(r'[^a-zA-Z0-9]', '_', titular['titular']).strip('_')
     codigo_contrato = titular['cod_contrato'].strip()
-    nome_arquivo = f"cadastro_{nome_titular_limpo}_contrato_{codigo_contrato}.csv"
+    nome_arquivo = f"cadastro_{nome_titular_limpo}_contrato_{codigo_contrato}.xlsx"
 
     # Salvar o DataFrame em memória (BytesIO)
     csv_data = io.BytesIO()
