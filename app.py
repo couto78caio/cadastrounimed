@@ -183,7 +183,7 @@ def salvar_excel():
 
     dados_para_excel = [
         {
-            'CATEGORIA': 'Titular',
+            'CATEGORIA': 'TITULAR',
             'TITULAR': nome_titular,
             'COD_CONTRATO': cod_contrato,
             'COD_BENEFICIARIO': cod_beneficiario_titular,
@@ -207,7 +207,7 @@ def salvar_excel():
 
     for dep in dependentes_data:
         dados_para_excel.append({
-            'CATEGORIA': 'Dependente',
+            'CATEGORIA': 'DEPENDENTE',
             'TITULAR': nome_titular,
             'COD_CONTRATO': cod_contrato,
             'COD_BENEFICIARIO': dep.get('Código Beneficiário Dependente', ''),
