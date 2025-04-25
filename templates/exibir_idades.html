@@ -14,7 +14,7 @@
             <h2>Titular</h2>
             <p>Nome: {{ titular.titular }}</p>
             <p>Código do Beneficiário: {{ titular.cod_beneficiario }}</p>
-            <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
+            <p>Data de Nascimento: <span data-date-iso="{{ titular.dt_nascimento }}"></span></p></p>
             <p>Idade: <input type="text" id="idade_titular" value="{{ idade_titular }}" readonly></p>
             <div class="form-group">
                 <label for="cod_contrato_exibir">Código do Contrato:</label>
@@ -38,7 +38,7 @@
             <li>
                 <p>Nome: {{ dependente.nome }}</p>
                 <p>Código do Beneficiário: {{ dependente.cod_beneficiario }}</p>
-                <p>Data de Nascimento: {{ dependente.dt_nascimento }}</p>
+                <p>Data de Nascimento: <span data-date-iso="{{ dependente.dt_nascimento }}"></span></p>
                 <p>Idade: {{ dependente.idade }}</p>
                 <div class="form-group">
                     <label for="valor_dependente_{{ dependente.index }}">Valor Mensal:</label>
@@ -75,5 +75,10 @@
             <button type="submit" class="btn btn-primary mt-3">Ver Resumo e Salvar</button>
         </form>
     </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        aplicarFormatoDataExibicao();
+    </script>
 </body>
 </html>
