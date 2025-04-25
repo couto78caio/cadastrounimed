@@ -49,38 +49,38 @@
                 <input type="text" class="form-control" id="num_telefone" name="num_telefone">
             </div>
             <div class="form-group">
-                 <label for="uf">UF</label>
-                 <select class="form-control" id="uf" name="uf">
-                     <option value="">Selecione</option>
-                     <option value="AC">AC</option>
-                     <option value="AL">AL</option>
-                     <option value="AP">AP</option>
-                     <option value="AM">AM</option>
-                     <option value="BA">BA</option>
-                     <option value="CE">CE</option>
-                     <option value="DF">DF</option>
-                     <option value="ES">ES</option>
-                     <option value="GO">GO</option>
-                     <option value="MA">MA</option>
-                     <option value="MT">MT</option>
-                     <option value="MS">MS</option>
-                     <option value="MG">MG</option>
-                     <option value="PA">PA</option>
-                     <option value="PB">PB</option>
-                     <option value="PR">PR</option>
-                     <option value="PE">PE</option>
-                     <option value="PI">PI</option>
-                     <option value="RJ">RJ</option>
-                     <option value="RN">RN</option>
-                     <option value="RS">RS</option>
-                     <option value="RO">RO</option>
-                     <option value="RR">RR</option>
-                     <option value="SC">SC</option>
-                     <option value="SP">SP</option>
-                     <option value="SE">SE</option>
-                     <option value="TO">TO</option>
-                 </select>
-             </div>
+                <label for="uf">UF</label>
+                <select class="form-control" id="uf" name="uf">
+                    <option value="">Selecione</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AP">AP</option>
+                    <option value="AM">AM</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MT">MT</option>
+                    <option value="MS">MS</option>
+                    <option value="MG">MG</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PR">PR</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RS">RS</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="SC">SC</option>
+                    <option value="SP">SP</option>
+                    <option value="SE">SE</option>
+                    <option value="TO">TO</option>
+                </select>
+            </div>
             <div class="form-group">
                 <label for="cidade">Cidade</label>
                 <input type="text" class="form-control" id="cidade" name="cidade">
@@ -105,7 +105,7 @@
             <div id="dependentes_container" style="display: none;">
                 <h2>Dependentes</h2>
                 <div id="lista_dependentes">
-                    </div>
+                </div>
                 <button type="button" onclick="adicionarDependente()" class="btn btn-success mt-2">Adicionar Dependente</button>
             </div>
 
@@ -116,7 +116,7 @@
     <script>
         let contadorDependentes = 0;
         const parentescos = [
-                "Cônjuge", "Pai", "Mãe","Filho(a)", "Irmão(ã)", "Neto(a)", "Outro"];
+            "Cônjuge", "Pai", "Mãe","Filho(a)", "Irmão(ã)", "Neto(a)", "Outro"];
 
         function mostrarDependentes() {
             const temDependente = document.getElementById('tem_dependente').value;
