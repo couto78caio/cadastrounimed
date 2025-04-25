@@ -152,6 +152,8 @@ def salvar_csv():
         else:
             break
 
+    print("Conteúdo de dependentes_data em /salvar_csv:", dependentes_data) # DEBUGGING LINE
+    
     nome_titular = titular['titular']
     sexo_titular = titular.get('sexo_titular', '')
     cpf_titular = titular['cpf_cnpj']
