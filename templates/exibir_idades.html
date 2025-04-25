@@ -60,15 +60,15 @@
 
             {% if dependentes %}
                 {% for dependente in dependentes %}
-                    <input type="hidden" name="dependente_nome_{{ dependente.index }}" value="{{ dependente.nome }}">
-                    <input type="hidden" name="dependente_cod_beneficiario_{{ dependente.index }}" value="{{ dependente.cod_beneficiario }}">
-                    <input type="hidden" name="sexo_dependente_{{ dependente.index }}" value="{{ dependente.sexo }}">
-                    <input type="hidden" name="dependente_cpf_{{ dependente.index }}" value="{{ dependente.cpf }}">
-                    <input type="hidden" name="dependente_nasc_{{ dependente.index }}" value="{{ dependente.dt_nascimento }}">
-                    <input type="hidden" name="dependente_parentesco_{{ dependente.index }}" value="{{ dependente.parentesco }}">
-                    <input type="hidden" name="idade_dependente_{{ dependente.index }}" value="{{ dependente.idade }}">
-                    <input type="hidden" name="valor_dependente_{{ dependente.index }}" value="{{ valores_dependentes[loop.index0].valor if valores_dependentes[loop.index0].valor is not none else '' }}">
-                    <input type="hidden" name="descricao_dependente_{{ dependente.index }}" value="{{ valores_dependentes[loop.index0].descricao if valores_dependentes[loop.index0].descricao is not none else '' }}">
+                    <input type="hidden" name="dependente_nome_{{ loop.index }}" value="{{ dependente.nome }}">
+                    <input type="hidden" name="dependente_cod_beneficiario_{{ loop.index }}" value="{{ dependente.cod_beneficiario }}">
+                    <input type="hidden" name="dependente_sexo_{{ loop.index }}" value="{{ dependente.sexo_dependente }}">
+                    <input type="hidden" name="dependente_cpf_{{ loop.index }}" value="{{ dependente.cpf }}">
+                    <input type="hidden" name="dependente_nasc_{{ loop.index }}" value="{{ dependente.dt_nascimento }}">
+                    <input type="hidden" name="dependente_parentesco_{{ loop.index }}" value="{{ dependente.parentesco }}">
+                    <input type="hidden" name="idade_dependente_{{ loop.index }}" value="{{ dependente.idade }}">
+                    <input type="hidden" name="valor_dependente_{{ loop.index }}" value="{{ valores_dependentes[loop.index0].valor if valores_dependentes[loop.index0].valor is not none else '' }}">
+                    <input type="hidden" name="descricao_dependente_{{ loop.index }}" value="{{ valores_dependentes[loop.index0].descricao if valores_dependentes[loop.index0].descricao is not none else '' }}">
                 {% endfor %}
             {% endif %}
 
