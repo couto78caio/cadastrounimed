@@ -43,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label for="num_conta_corrente">Número da Conta Corrente</label>
-                <input type="text" class="form-control" id="num_conta_corrente" name="num_conta_corrente">
+                <<input type="text" class="form-control" id="num_conta_corrente" name="num_conta_corrente" maxlength="8">
             </div>
             <div class="form-group">
                 <label for="num_telefone">Número de Telefone</label>
@@ -116,6 +116,44 @@
 
     <script>
         VMasker(document.querySelectorAll('.cpf-mask')).maskPattern('999.999.999-99');
+
+        const inputContaCorrente = document.getElementById('num_conta_corrente');
+        
+        function aplicarMascaraContaCorrente(input) {
+            let posicaoCursor = input.selectionStart; // Pega onde o cursor está
+            let valor = input.value.replace(/\D/g, ''); // Tira tudo que não é número
+            let tamanho = valor.length;
+            if (tamanho > 8) {
+                valor = valor.slice(0, 8);
+                tamanho = 8;
+            }
+            
+            let mascara = tamanho > 1 ? '9'.repeat(tamanho - 1) + '-9' : '9';
+            
+            VMasker(input).unMask();
+            VMasker(input).maskPattern(mascara);
+            
+            const valorComMascara = VMasker.toPattern(valor, mascara);
+            input.value = valorComMascara;
+            
+            // === Corrigir posição do cursor ===
+            // Se o cursor estava antes ou depois do traço, ajusta
+            if (posicaoCursor) {
+                if (input.value.charAt(posicaoCursor - 1) === '-' && event.inputType === "deleteContentBackward") {
+                    posicaoCursor--; // Se deletou o traço, volta 1
+                }
+                input.setSelectionRange(posicaoCursor, posicaoCursor);
+            }
+        }
+        
+        inputContaCorrente.addEventListener('input', function(event) {
+            aplicarMascaraContaCorrente(inputContaCorrente, event);
+        });
+        
+        inputContaCorrente.addEventListener('keydown', function(event) {
+            // Armazena a posição do cursor ao pressionar uma tecla
+            this._posicaoCursor = this.selectionStart;
+        });
 
         let contadorDependentes = 0;
         const parentescos = [
