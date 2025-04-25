@@ -107,7 +107,7 @@ def resumo_cadastro():
             dependente = {
                 'nome': nome_dependente,
                 'cod_beneficiario': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'sexo': request.form.get(f'sexo_dependente_{i}'), # CORREÇÃO ANTERIOR
+                'sexo': request.form.get(f'dependente_sexo_{i}'), # CORREÇÃO ANTERIOR
                 'cpf': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}'),
