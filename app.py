@@ -107,7 +107,7 @@ def resumo_cadastro():
             dependente = {
                 'nome': nome_dependente,
                 'cod_beneficiario': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'sexo': request.form.get(f'dependente_sexo_{i}'), # CORREÇÃO ANTERIOR
+                'sexo': request.form.get(f'dependente_sexo_{i}'),
                 'cpf': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}'),
@@ -118,7 +118,7 @@ def resumo_cadastro():
         else:
             break
 
-    print("Conteúdo da variável 'dependentes' em /resumo:", dependentes) # Mantenha esta linha para debug
+    print("Conteúdo da variável 'dependentes' em /resumo:", dependentes)
 
     idade_titular = int(request.form['idade_titular'])
     codigo_contrato = titular['cod_contrato']
@@ -128,16 +128,16 @@ def resumo_cadastro():
     for dependente in dependentes:
         idade_dependente = int(dependente['idade'])
         valor_dependente, descricao_dependente = obter_preco(codigo_contrato, idade_dependente)
-        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente, 'sexo': dependente['sexo']}) # Adicionando o sexo aqui
-        print(f"Dados do dependente {dependente['nome']} em /resumo:", valores_dependentes[-1]) # Debug para o sexo
+        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente, 'sexo': dependente['sexo']})
+        print(f"Dados do dependente {dependente['nome']} em /resumo:", valores_dependentes[-1])
     total = valor_titular if valor_titular else 0
     for valor_dep in [dep['valor'] for dep in valores_dependentes if dep['valor'] is not None]:
         total += valor_dep
 
     return render_template('resumo_cadastro.html', titular=titular, idade_titular=idade_titular, valor_titular=valor_titular, descricao_titular=descricao_titular, dependentes=dependentes, valores_dependentes=valores_dependentes, total=total)
 
-@app.route('/salvar_csv', methods=['POST'])
-def salvar_csv():
+@app.route('/salvar_excel', methods=['POST'])
+def salvar_excel():
     titular = request.form.to_dict()
     dependentes_data = []
     i = 1
@@ -164,7 +164,7 @@ def salvar_csv():
         else:
             break
 
-    print("Conteúdo de dependentes_data em /salvar_csv:", dependentes_data)
+    print("Conteúdo de dependentes_data em /salvar_excel:", dependentes_data)
 
     nome_titular = titular['titular']
     sexo_titular = titular.get('sexo_titular', '')
@@ -181,7 +181,7 @@ def salvar_csv():
     descricao_titular = request.form['descricao_titular']
     total_valor = request.form.get('total', '')
 
-    dados_para_csv = [
+    dados_para_excel = [
         {
             'CATEGORIA': 'Titular',
             'TITULAR': nome_titular,
@@ -199,15 +199,15 @@ def salvar_csv():
             'VL_PLANO': request.form['valor_titular'],
             'DESC_PLANO': descricao_titular,
             'PARENTESCO': 'Titular',
-            'DEPENDENTES': '',
-            'CPF_DEPEND': '',
+            'DEPENDENTES': '-'.join(dependentes_nomes) if dependentes_nomes else '',
+            'CPF_DEPEND': '-'.join(dependentes_cpfs) if dependentes_cpfs else '',
             'CIDADE': cidade_titular,
             'Total': total_valor
         }
     ]
-    
+
     for dep in dependentes_data:
-        dados_para_csv.append({
+        dados_para_excel.append({
             'CATEGORIA': 'Dependente',
             'TITULAR': nome_titular,
             'COD_CONTRATO': cod_contrato,
@@ -238,11 +238,11 @@ def salvar_csv():
     nome_arquivo = f"cadastro_{nome_titular_limpo}_contrato_{codigo_contrato}.xlsx"
 
     # Salvar o DataFrame em memória (BytesIO)
-    csv_data = io.BytesIO()
+    excel_data = io.BytesIO()
     df.to_excel(excel_data, index=False, sheet_name='Dados', engine='openpyxl')
     excel_data.seek(0)
 
-    # Enviar o arquivo como resposta para download com o novo nome
+    # Enviar o arquivo como resposta para download com o novo nome e mimetype
     return send_file(
         excel_data,
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
