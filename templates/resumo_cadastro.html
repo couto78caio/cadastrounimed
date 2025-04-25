@@ -17,7 +17,7 @@
             <p>Código do Beneficiário: {{ titular.cod_beneficiario }}</p>
             <p>Sexo: {{ titular.sexo_titular }}</p>
             <p>CPF/CNPJ: {{ titular.cpf_cnpj }}</p>
-            <p>Data de Nascimento: {{ titular.dt_nascimento }}</p>
+            <p>Data de Nascimento: <span data-date-iso="{{ titular.dt_nascimento }}"></span></p>
             <p>Número da Conta Corrente: {{ titular.num_conta_corrente }}</p>
             <p>Número de Telefone: {{ titular.num_telefone }}</p>
             <p>UF: {{ titular.uf }}</p>
@@ -40,7 +40,7 @@
                 <p>Código do Beneficiário: {{ dependente.cod_beneficiario }}</p>
                 <p>Sexo: {{ dependente.sexo }}</p>
                 <p>CPF/CNPJ: {{ dependente.cpf }}</p>
-                <p>Data de Nascimento: {{ dependente.dt_nascimento }}</p>
+                <p>Data de Nascimento: <span data-date-iso="{{ dependente.dt_nascimento }}"></span></p>
                 <p>Parentesco: {{ dependente.parentesco }}</p>
                 <p>Idade: {{ dependente.idade }}</p>
                 <p>Valor Mensal: {{ valores_dependentes[loop.index0].valor if valores_dependentes[loop.index0].valor is not none else 'Não Calculado' }}</p>
@@ -80,5 +80,10 @@
             <button type="submit" class="btn btn-success mt-3">Salvar Cadastro em Excel</button>
         </form>
     </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        aplicarFormatoDataExibicao();
+    </script>
 </body>
 </html>
