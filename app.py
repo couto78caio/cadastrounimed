@@ -102,21 +102,28 @@ def resumo_cadastro():
                 'cpf': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}'),
-                'idade': int(request.form.get(f'idade_dependente_{i}'))
+                'idade': request.form.get(f'idade_dependente_{i}')
             }
             dependentes.append(dependente)
             i += 1
         else:
             break
 
-    print("Conteúdo do request.form em /resumo:", request.form) # DEBUGGING LINE
+    print("Conteúdo da variável 'dependentes' em /resumo:", dependentes) # Mantenha esta linha para debug
 
     idade_titular = int(request.form['idade_titular'])
     codigo_contrato = titular['cod_contrato']
 
     valor_titular, descricao_titular = obter_preco(codigo_contrato, idade_titular)
     valores_dependentes = []
+    for dependente in dependentes:
+        idade_dependente = int(dependente['idade'])
+        valor_dependente, descricao_dependente = obter_preco(codigo_contrato, idade_dependente)
+        valores_dependentes.append({'nome': dependente['nome'], 'valor': valor_dependente, 'descricao': descricao_dependente})
+
     total = valor_titular if valor_titular else 0
+    for valor_dep in [dep['valor'] for dep in valores_dependentes if dep['valor'] is not None]:
+        total += valor_dep
 
     return render_template('resumo_cadastro.html', titular=titular, idade_titular=idade_titular, valor_titular=valor_titular, descricao_titular=descricao_titular, dependentes=dependentes, valores_dependentes=valores_dependentes, total=total)
 
@@ -148,7 +155,7 @@ def salvar_csv():
         else:
             break
 
-    print("Conteúdo de dependentes_data em /salvar_csv:", dependentes_data) # DEBUGGING LINE
+    print("Conteúdo de dependentes_data em /salvar_csv:", dependentes_data)
 
     nome_titular = titular['titular']
     sexo_titular = titular.get('sexo_titular', '')
@@ -163,7 +170,7 @@ def salvar_csv():
     cod_contrato = titular['cod_contrato']
     cod_beneficiario_titular = titular.get('cod_beneficiario', '')
     descricao_titular = request.form['descricao_titular']
-    total_valor = request.form.get('total', '') # Use .get() para evitar KeyError
+    total_valor = request.form.get('total', '')
 
     dados_para_csv = [
         {
@@ -201,7 +208,7 @@ def salvar_csv():
             'CPF_TITULAR': '',
             'DT_NSCMT': dep['Data de Nascimento Dependente'],
             'N_CONTA_CORRENTE': num_conta_corrente_titular,
-            'N_TEL': num_telefone_titular,
+            'N_TEL: num_telefone_titular,
             'ENDERECO': f"{endereco_titular}-{cidade_titular}-{uf_titular}",
             'DT_INCLS': data_contrato_titular,
             'IDADE': dep['Idade Dependente'],
