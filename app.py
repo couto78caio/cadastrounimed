@@ -137,7 +137,7 @@ def salvar_csv():
             dependente = {
                 'Nome Dependente': nome_dependente,
                 'Código Beneficiário Dependente': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'Sexo Dependente': request.form.get(f'sexo_dependente_{i}'),
+                'sexo_dependente': request.form.get(f'sexo_dependente_{i}'),
                 'CPF Dependente': request.form.get(f'dependente_cpf_{i}'),
                 'Data de Nascimento Dependente': request.form.get(f'dependente_nasc_{i}'),
                 'Parentesco': request.form.get(f'dependente_parentesco_{i}'),
@@ -187,8 +187,8 @@ def salvar_csv():
             'VL_PLANO': request.form['valor_titular'],
             'DESC_PLANO': descricao_titular,
             'PARENTESCO': 'Titular',
-            'DEPENDENTES': '-'.join(dependentes_nomes) if dependentes_nomes else '',
-            'CPF_DEPEND': '-'.join(dependentes_cpfs) if dependentes_cpfs else '',
+            'DEPENDENTES': '',
+            'CPF_DEPEND': '',
             'CIDADE': cidade_titular
         }
     ]
@@ -199,7 +199,7 @@ def salvar_csv():
             'TITULAR': nome_titular,
             'COD_CONTRATO': cod_contrato,
             'COD_BENEFICIARIO': dep.get('Código Beneficiário Dependente', ''),
-            'SEXO': dep.get('Sexo Dependente'),
+            'SEXO': dep['sexo_dependente'],
             'CPF_GERAL': dep['CPF Dependente'],
             'CPF_TITULAR': '',
             'DT_NSCMT': dep['Data de Nascimento Dependente'],
