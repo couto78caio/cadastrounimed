@@ -43,7 +43,7 @@
                 <p>Data de Nascimento: {{ dependentes[i].dt_nascimento }}</p>
                 <p>Idade: {{ dependentes[i].idade }}</p>
                 <p>Parentesco: {{ dependentes[i].parentesco }}</p>
-                <p>Sexo: {{ dependentes[i].sexo_dependente }}</p>
+                <p>Sexo: {{ dependentes[i].sexo }}</p>
                 <hr>
                 <p>Descrição do Plano: {{ valores_dependentes[i].descricao }}</p>
                 <p>Código do Contrato: {{ titular.cod_contrato }}</p>
@@ -70,7 +70,7 @@
                 {% for i in range(dependentes|length) %}
                     <input type="hidden" name="dependente_nome_{{ i + 1 }}" value="{{ dependentes[i].nome }}">
                     <input type="hidden" name="dependente_cod_beneficiario_{{ i + 1 }}" value="{{ dependentes[i].cod_beneficiario }}">
-                    <input type="hidden" name="sexo_dependente_{{ i + 1 }}" value="{{ dependentes[i].sexo_dependente }}">
+                    <input type="hidden" name="dependente_sexo_{{ i + 1 }}" value="{{ dependentes[i].sexo }}">
                     <input type="hidden" name="dependente_cpf_{{ i + 1 }}" value="{{ dependentes[i].cpf }}">
                     <input type="hidden" name="dependente_nasc_{{ i + 1 }}" value="{{ dependentes[i].dt_nascimento }}">
                     <input type="hidden" name="dependente_parentesco_{{ i + 1 }}" value="{{ dependentes[i].parentesco }}">
