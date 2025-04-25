@@ -35,7 +35,7 @@ function adicionarDependente() {
             <option value="outro">Outro</option>
         </select></label></div>
         <div class="field"><label>CPF/CNPJ: <input type="text" name="dependente_cpf_${index}"></label></div>
-        <div class="field"><label>Data de Nascimento: <input type="date" name="dependente_nasc_${index}" required></label></div>
+        <div class="field"><label>Data de Nascimento: <input type="date" name="dependente_nasc_${index}" class="data-input" required></label></div>
         <div class="field">
             <label>Parentesco:
                 <select name="dependente_parentesco_${index}">
@@ -50,4 +50,54 @@ function adicionarDependente() {
     </div>
     `;
     container.insertAdjacentHTML('beforeend', html);
+}
+
+function formatarDataParaExibir(dataISO) {
+    if (!dataISO) return "";
+    const data = new Date(dataISO);
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+}
+
+function aplicarFormatoDataExibicao() {
+    document.addEventListener('DOMContentLoaded', function() {
+        const elementosComData = document.querySelectorAll('[data-date-iso]');
+        elementosComData.forEach(elemento => {
+            const dataISO = elemento.getAttribute('data-date-iso');
+            elemento.textContent = formatarDataParaExibir(dataISO);
+        });
+
+        // Aplica a classe 'data-input' a todos os campos de data gerados dinamicamente
+        const camposData = document.querySelectorAll('#lista_dependentes input[type="date"]');
+        camposData.forEach(campo => campo.classList.add('data-input'));
+    });
+}
+
+function formatarDataParaEnviar(dataISO) {
+    if (!dataISO) return "";
+    return dataISO; // Mantém no formato ISO para o backend
+}
+
+function formatarDatasNosInputs(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const inputs = form.querySelectorAll('input[type="hidden"]');
+
+    inputs.forEach(input => {
+        if (input.name.includes('dt_nascimento') || input.name.includes('dt_contrato') || input.name.includes('dependente_nasc')) {
+            input.value = formatarDataParaEnviar(input.value);
+        }
+    });
+}
+
+function formatarDatasSalvarExcel() {
+    formatarDatasNosInputs('form_salvar_excel');
+    document.getElementById('form_salvar_excel').submit();
+}
+
+function formatarDatasSalvarCSV() {
+    formatarDatasNosInputs('form_salvar_csv');
+    document.getElementById('form_salvar_csv').submit();
 }
