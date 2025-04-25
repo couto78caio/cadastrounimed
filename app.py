@@ -192,8 +192,7 @@ def salvar_csv():
             'PARENTESCO': 'Titular',
             'DEPENDENTES': '-'.join(dependentes_nomes) if dependentes_nomes else '',
             'CPF_DEPEND': '-'.join(dependentes_cpfs) if dependentes_cpfs else '',
-            'CIDADE': cidade_titular,
-            'Total': total_valor
+            'CIDADE': cidade_titular
         }
     ]
 
@@ -208,7 +207,7 @@ def salvar_csv():
             'CPF_TITULAR': '',
             'DT_NSCMT': dep['Data de Nascimento Dependente'],
             'N_CONTA_CORRENTE': num_conta_corrente_titular,
-            'N_TEL: num_telefone_titular,
+            'N_TEL': num_telefone_titular,
             'ENDERECO': f"{endereco_titular}-{cidade_titular}-{uf_titular}",
             'DT_INCLS': data_contrato_titular,
             'IDADE': dep['Idade Dependente'],
@@ -217,8 +216,7 @@ def salvar_csv():
             'PARENTESCO': dep['Parentesco'],
             'DEPENDENTES': dep['Nome Dependente'],
             'CPF_DEPEND': dep['CPF Dependente'],
-            'CIDADE': cidade_titular,
-            'Total': ''
+            'CIDADE': cidade_titular
         })
 
     df = pd.DataFrame(dados_para_csv)
