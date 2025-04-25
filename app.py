@@ -107,7 +107,7 @@ def resumo_cadastro():
             dependente = {
                 'nome': nome_dependente,
                 'cod_beneficiario': request.form.get(f'dependente_cod_beneficiario_{i}', ''),
-                'sexo': request.form.get(f'sexo_dependente_{i}'), # CORREÇÃO AQUI
+                'sexo': request.form.get(f'sexo_dependente_{i}'), # CORREÇÃO ANTERIOR
                 'cpf': request.form.get(f'dependente_cpf_{i}'),
                 'dt_nascimento': request.form.get(f'dependente_nasc_{i}'),
                 'parentesco': request.form.get(f'dependente_parentesco_{i}'),
@@ -205,7 +205,7 @@ def salvar_csv():
             'Total': total_valor
         }
     ]
-
+    
     for dep in dependentes_data:
         dados_para_csv.append({
             'CATEGORIA': 'Dependente',
@@ -252,3 +252,4 @@ def salvar_csv():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
