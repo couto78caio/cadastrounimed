@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
                 <label for="num_telefone">Número de Telefone</label>
-                <input type="text" class="form-control" id="num_telefone" name="num_telefone">
+                <input type="text" class="form-control tel-mask" id="num_telefone" name="num_telefone" maxlength="11">
             </div>
             <div class="form-group">
                 <label for="uf">UF</label>
@@ -116,6 +116,8 @@
 
     <script>
         VMasker(document.querySelectorAll('.cpf-mask')).maskPattern('999.999.999-99');
+        
+        VMasker(document.querySelectorAll('.tel-mask')).maskPattern('(99) 99999-9999');
 
         const inputContaCorrente = document.getElementById('num_conta_corrente');
         
