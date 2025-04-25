@@ -6,6 +6,7 @@
     <title>Formulário de Cadastro</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.2.0/vanilla-masker.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
@@ -34,7 +35,7 @@
             </div>
             <div class="form-group">
                 <label for="cpf_cnpj">CPF/CNPJ do Titular *</label>
-                <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj" required>
+                <input type="text" class="form-control cpf-mask" id="cpf_cnpj" name="cpf_cnpj" required>
             </div>
             <div class="form-group">
                 <label for="dt_nascimento">Data de Nascimento do Titular *</label>
@@ -114,6 +115,8 @@
     </div>
 
     <script>
+        VMasker(document.querySelectorAll('.cpf-mask')).maskPattern('999.999.999-99');
+
         let contadorDependentes = 0;
         const parentescos = [
             "Cônjuge", "Pai", "Mãe","Filho(a)", "Irmão(ã)", "Neto(a)", "Outro"];
@@ -176,7 +179,7 @@
                 </div>
                 <div class="form-group">
                     <label for="dependente_cpf_${index}">CPF/CNPJ do Dependente</label>
-                    <input type="text" class="form-control" id="dependente_cpf_${index}" name="dependente_cpf_${index}">
+                    <input type="text" class="form-control cpf-mask" id="dependente_cpf_${index}" name="dependente_cpf_${index}">
                 </div>
                 <div class="form-group">
                     <label for="dependente_nasc_${index}">Data de Nascimento do Dependente *</label>
@@ -193,6 +196,7 @@
                 <hr>
             `;
             document.getElementById('lista_dependentes').appendChild(novoDependenteDiv);
+            VMasker(novoDependenteDiv.querySelector('.cpf-mask')).maskPattern('999.999.999-99');
             atualizarTitularNosDependentes();
             atualizarContratoNosDependentes();
         }
