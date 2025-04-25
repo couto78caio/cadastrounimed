@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, send_file
- import pandas as pd
- from datetime import datetime
- import io
- import re
+import pandas as pd
+from datetime import datetime
+import io
+import re
+
+app = Flask(__name__)
  
  app = Flask(__name__)
  
