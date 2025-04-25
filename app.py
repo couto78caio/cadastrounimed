@@ -199,10 +199,9 @@ def salvar_excel():
             'VL_PLANO': request.form['valor_titular'],
             'DESC_PLANO': descricao_titular,
             'PARENTESCO': 'Titular',
-            'DEPENDENTES': '-'.join(dependentes_nomes) if dependentes_nomes else '',
-            'CPF_DEPEND': '-'.join(dependentes_cpfs) if dependentes_cpfs else '',
-            'CIDADE': cidade_titular,
-            'Total': total_valor
+            'DEPENDENTES': '',
+            'CPF_DEPEND': '',
+            'CIDADE': cidade_titular
         }
     ]
 
@@ -226,8 +225,7 @@ def salvar_excel():
             'PARENTESCO': dep['Parentesco'],
             'DEPENDENTES': dep['Nome Dependente'],
             'CPF_DEPEND': dep['CPF Dependente'],
-            'CIDADE': cidade_titular,
-            'Total': ''
+            'CIDADE': cidade_titular
         })
 
     df = pd.DataFrame(dados_para_excel)
